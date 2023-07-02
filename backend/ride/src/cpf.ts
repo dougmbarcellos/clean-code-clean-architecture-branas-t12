@@ -3,13 +3,16 @@ enum DigitType {
   LAST = 10, // 111.444.777-3X
 }
 
-function isRepeated(cpf: string): boolean {
+const isValidLength = (formattedCPF: string) =>
+  formattedCPF && formattedCPF.length >= 11 && formattedCPF.length <= 14;
+
+function hasSequentiallyRepeatedDigits(cpf: string): boolean {
   const firstDigit = cpf.at(0);
 
   return cpf.split('').every((digit) => digit === firstDigit);
 }
 
-const removeFormat = (cpf: string) => cpf.replace(/[^\d]/g, '');
+const cleanFormat = (cpf: string) => cpf.replace(/\D/g, '');
 
 function getVerificationDigit(rawCPF: string, upToDigit: DigitType): string {
   const reverseDigitList = rawCPF.slice(0, upToDigit).split('').reverse();
@@ -26,11 +29,10 @@ function getVerificationDigit(rawCPF: string, upToDigit: DigitType): string {
 }
 
 export function validate(formattedCPF: string): boolean {
-  if (!formattedCPF || formattedCPF.length < 11 || formattedCPF.length > 14)
-    return false;
+  if (!isValidLength(formattedCPF)) return false;
 
-  const rawCPF = removeFormat(formattedCPF);
-  if (isRepeated(rawCPF)) return false;
+  const rawCPF = cleanFormat(formattedCPF);
+  if (hasSequentiallyRepeatedDigits(rawCPF)) return false;
 
   try {
     const penultimateDigit = getVerificationDigit(
@@ -42,7 +44,7 @@ export function validate(formattedCPF: string): boolean {
     const lastDigit = getVerificationDigit(rawCPF, DigitType.LAST);
     if (lastDigit !== rawCPF.at(DigitType.LAST)) return false;
   } catch (e) {
-    console.error('Erro !' + e);
+    console.error(`Error ${e}!`);
     return false;
   }
 
