@@ -1,12 +1,21 @@
 // @ts-nocheck
 import express from 'express';
+import { Db } from 'mongodb';
 import CPFDocument from './CPFDocument';
 import Ride from './Ride';
-const app = express();
+import { connect } from './db';
 
-function generateUUID(passenger) {
-  return Date.now().toString();
-}
+let db: Db;
+
+connect()
+  .then((dbConn) => {
+    db = dbConn;
+  })
+  .catch((error) => {
+    console.error('Error connecting to DB.', error);
+  });
+
+const app = express();
 
 app.use(express.json());
 
@@ -23,29 +32,33 @@ app.post('/calculate_ride', function (req, res) {
   }
 });
 
-app.post('/passengers', function (req, res) {
+app.post('/passengers', async function (req, res) {
   try {
     const passenger = req.body;
     if (!new CPFDocument(passenger.document).validate()) {
       throw new Error('Invalid document');
     }
 
-    res.json({ passenger_id: generateUUID() });
+    const output = await db.collection('passengers').insertOne(passenger);
+
+    return res.json({ passenger_id: output.insertedId });
   } catch (e) {
     res.status(422).send(e.message);
   }
 });
 
-app.post('/drivers', function (req, res) {
+app.post('/drivers', async function (req, res) {
   try {
     const driver = req.body;
     if (!new CPFDocument(driver.document).validate()) {
       throw new Error('Invalid document');
     }
 
-    res.json({ driver_id: generateUUID() });
+    const output = await db.collection('drivers').insertOne(driver);
+
+    return res.json({ driver_id: output.insertedId });
   } catch (e) {
-    res.status(422).send(e.message);
+    return res.status(422).send(e.message);
   }
 });
 
