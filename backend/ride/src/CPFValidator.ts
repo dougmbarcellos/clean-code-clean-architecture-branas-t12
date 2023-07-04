@@ -3,7 +3,7 @@ enum VerificationDigit {
   LAST = 10, // 111.444.777-3X
 }
 
-export default class CPFDocument {
+export default class CPFValidator {
   private cleanDocument: string;
 
   constructor(private readonly document: string) {

@@ -29,9 +29,12 @@ test('Deve cadastrar um passageiro', async function () {
     email: 'doug@doug.br',
     document: '111.444.777-35',
   };
-  const response = await axios.post('http://localhost:3000/passengers', input);
-  const output = response.data;
-  expect(output.passenger_id).toBeTruthy();
+  const response1 = await axios.post('http://localhost:3000/passengers', input);
+  const output1 = response1.data;
+  expect(output1.passengerId).toBeDefined();
+  const response2 = await axios.get(`http://localhost:3000/passengers/${output1.passengerId}`);
+  const output2 = response2.data;
+  expect(output2.passengerId).toBe(output1.passengerId);
 });
 
 test('Deve lançar um erro se o passageiro estiver com documento inválido', async function () {
@@ -48,14 +51,18 @@ test('Deve lançar um erro se o passageiro estiver com documento inválido', asy
 
 test('Deve cadastrar um motorista', async function () {
   const input = {
-    name: 'Douglas',
-    email: 'doug@doug.br',
+    name: 'Douglass',
+    email: 'doug@doug.brr',
     document: '111.444.777-35',
-    car_plate: 'XYZ1234',
+    carPlate: 'XYZ1230',
   };
-  const response = await axios.post('http://localhost:3000/drivers', input);
-  const output = response.data;
-  expect(output.driver_id).toBeTruthy();
+  const response1 = await axios.post('http://localhost:3000/drivers', input);
+  const output1 = response1.data;
+  expect(output1.driverId).toBeDefined();
+
+  const response2 = await axios.get(`http://localhost:3000/drivers/${output1.driverId}`);
+  const output2 = response2.data;
+  expect(output2.driverId).toBe(output1.driverId);
 });
 
 test('Deve lançar um erro se o motorista estiver com documento inválido', async function () {
@@ -63,7 +70,7 @@ test('Deve lançar um erro se o motorista estiver com documento inválido', asyn
     name: 'Douglas',
     email: 'doug@doug.br',
     document: '111.444.777-05', // CPF incorreto
-    car_plate: 'XYZ1234',
+    carPlate: 'XYZ1234',
   };
   const response = await axios.post('http://localhost:3000/drivers', input);
   expect(response.status).toBe(422);
