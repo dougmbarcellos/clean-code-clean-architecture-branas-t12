@@ -1,6 +1,7 @@
 export default class Segment {
-  constructor(readonly distance: number, readonly date: Date) {
-    if (!this.isValidDistance()) throw new Error('Invalid distance');
+  constructor(readonly from: number[], readonly to: number[], readonly date: Date) {
+    if (!this.isValidCoordinatesFrom() || !this.isValidCoordinatesTo())
+      throw new Error('Invalid distance');
     if (!this.isValidDate()) throw new Error('Invalid date');
   }
 
@@ -12,8 +13,25 @@ export default class Segment {
     return this.date.getDay() === 0;
   }
 
-  isValidDistance() {
-    return this.distance && typeof this.distance === 'number' && this.distance > 0;
+  isValidCoordinatesFrom() {
+    return this.from && this.from.length === 2 && this.isValidLatLong(this.from);
+  }
+
+  isValidCoordinatesTo() {
+    return this.to && this.to.length === 2 && this.isValidLatLong(this.to);
+  }
+
+  isValidLatLong(coordinates: number[]) {
+    const [lat, long] = coordinates;
+    return this.isValidLatitude(lat) && this.isValidLongitude(long);
+  }
+
+  isValidLatitude(latitude: number) {
+    return latitude >= -90 && latitude <= 90;
+  }
+
+  isValidLongitude(longitude: number) {
+    return longitude >= -180 && longitude <= 180;
   }
 
   isValidDate() {
