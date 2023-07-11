@@ -81,3 +81,42 @@ test('Deve lançar um erro se o motorista estiver com documento inválido', asyn
   const output = response.data;
   expect(output).toBe('Invalid document');
 });
+
+test('Deve fazer uma requisição de corrida', async function () {
+  const input = {
+    passengerId: '64a32d0fe14712d428c5c66d',
+    from: coordsSaoRoque,
+    to: coordsSantaTeresa,
+  };
+  const response1 = await axios.post('http://localhost:3000/request_ride', input);
+  const output1 = response1.data;
+  expect(output1.rideId).toBeDefined();
+
+  const response2 = await axios.get(`http://localhost:3000/rides/${output1.rideId}`);
+  const output2 = response2.data;
+  expect(output2.requestDate).toBeDefined();
+  expect(output2.rideStatus).toBe('waiting_driver');
+});
+
+test('Motorista deve aceitar uma corrida', async function () {
+  const input1 = {
+    passengerId: '64a32d0fe14712d428c5c66d',
+    from: coordsSaoRoque,
+    to: coordsSantaTeresa,
+  };
+  const response1 = await axios.post('http://localhost:3000/request_ride', input1);
+  const output1 = response1.data;
+  expect(output1.rideId).toBeDefined();
+
+  const input2 = {
+    rideId: output1.rideId,
+    driverId: '64a32d2fe14712d428c5c66e',
+  };
+
+  await axios.post('http://localhost:3000/accept_ride', input2);
+
+  const response2 = await axios.get(`http://localhost:3000/rides/${output1.rideId}`);
+  const output2 = response2.data;
+  expect(output2.acceptDate).toBeDefined();
+  expect(output2.rideStatus).toBe('accepted');
+});
