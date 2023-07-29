@@ -10,10 +10,4 @@ const client = new MongoClient(process.env.ATLAS_URI, {
   },
 });
 
-async function connect() {
-  const connection = await client.connect();
-
-  return connection.db('db1');
-}
-
-export { connect };
+export { client };
