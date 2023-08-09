@@ -1,7 +1,6 @@
 // @ts-nocheck
 import express from 'express';
-import { ObjectId } from 'mongodb';
-import CPFValidator from './CPFValidator';
+import { ObjectId, WithId } from 'mongodb';
 import Driver from './Driver';
 import Passenger from './Passenger';
 import Ride from './Ride';
@@ -41,7 +40,7 @@ function initRouter() {
   app.get('/passengers/:passengerId', async function (req, res) {
     try {
       await client.connect();
-      const data = await client
+      const data: WithId<Passenger> = await client
         .db('db1')
         .collection('passengers')
         .findOne({ _id: new ObjectId(req.params.passengerId) }, { name: 1, email: 1, document: 1 });
@@ -67,9 +66,6 @@ function initRouter() {
         req.body.document,
         req.body.carPlate
       );
-      if (!new CPFValidator(driver.document).validate()) {
-        throw new Error('Invalid document');
-      }
       await client.connect();
       const data = await client.db('db1').collection('drivers').insertOne(driver);
       res.json({ driverId: data.insertedId });
@@ -83,7 +79,7 @@ function initRouter() {
   app.get('/drivers/:driverId', async function (req, res) {
     try {
       await client.connect();
-      const data = await client
+      const data: WithId<Driver> = await client
         .db('db1')
         .collection('drivers')
         .findOne(
