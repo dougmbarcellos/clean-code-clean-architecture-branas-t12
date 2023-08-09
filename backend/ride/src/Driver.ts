@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 import CPFValidator from './CPFValidator';
 
 export default class Driver {
@@ -6,8 +5,7 @@ export default class Driver {
     private name: string,
     private email: string,
     private document: string,
-    private carPlate: string,
-    private id?: ObjectId
+    private carPlate: string
   ) {
     this.validateRequired();
     new CPFValidator(this.document).validate();

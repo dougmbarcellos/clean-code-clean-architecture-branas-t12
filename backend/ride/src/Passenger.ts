@@ -1,13 +1,7 @@
-import { ObjectId } from 'mongodb';
 import CPFValidator from './CPFValidator';
 
 export default class Passenger {
-  constructor(
-    private name: string,
-    private email: string,
-    private document: string,
-    private id?: ObjectId
-  ) {
+  constructor(private name: string, private email: string, private document: string) {
     this.validateRequired();
     new CPFValidator(this.document).validate();
   }
