@@ -1,27 +1,17 @@
-import { ObjectId } from 'mongodb';
-import Passenger from '../../Passenger';
-import { client } from '../../db';
+import PassengerRepository from '../repository/PassengerRepository';
 
 export default class GetPassenger {
-  constructor() {}
+  constructor(readonly passengerRepository: PassengerRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    try {
-      await client.connect();
-      const data = await client
-        .db('db1')
-        .collection<Passenger>('passengers')
-        .findOne({ _id: new ObjectId(input.passengerId) });
-      if (!data) throw new Error('Not found');
-      return {
-        passengerId: data._id.toString(),
-        name: data.name,
-        email: data.email,
-        document: data.document,
-      };
-    } finally {
-      await client.close();
-    }
+    const passengerData = await this.passengerRepository.get(input.passengerId);
+    if (!passengerData) throw new Error('Not found');
+    return {
+      passengerId: passengerData._id.toString(),
+      name: passengerData.name,
+      email: passengerData.email,
+      document: passengerData.document,
+    };
   }
 }
 

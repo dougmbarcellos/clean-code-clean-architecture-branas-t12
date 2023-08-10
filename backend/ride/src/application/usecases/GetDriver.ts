@@ -1,24 +1,17 @@
-import { ObjectId } from 'mongodb';
-import Driver from '../../Driver';
-import { client } from '../../db';
+import DriverRepository from '../../infra/repository/DriverRepositoryDatabase';
 
 export default class GetDriver {
-  constructor() {}
+  constructor(readonly driverRepository: DriverRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    await client.connect();
-    const data = await client
-      .db('db1')
-      .collection<Driver>('drivers')
-      .findOne({ _id: new ObjectId(input.driverId) });
-    if (!data) throw new Error('Not found');
-    await client.close();
+    const driverData = await this.driverRepository.get(input.driverId);
+    if (!driverData) throw new Error('Not found');
     return {
-      driverId: data._id.toString(),
-      name: data.name,
-      email: data.email,
-      document: data.document,
-      carPlate: data.carPlate,
+      driverId: driverData._id.toString(),
+      name: driverData.name,
+      email: driverData.email,
+      document: driverData.document,
+      carPlate: driverData.carPlate,
     };
   }
 }

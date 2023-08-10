@@ -1,18 +1,13 @@
 import Passenger from '../../Passenger';
-import { client } from '../../db';
+import PassengerRepository from '../repository/PassengerRepository';
 
 export default class CreatePassenger {
-  constructor() {}
+  constructor(readonly passengerRepository: PassengerRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    try {
-      const passenger = new Passenger(input.name, input.email, input.document);
-      await client.connect();
-      const data = await client.db('db1').collection('passengers').insertOne(passenger);
-      return { passengerId: data.insertedId.toString() };
-    } finally {
-      await client.close();
-    }
+    const passenger = new Passenger(input.name, input.email, input.document);
+    const passengerData = await this.passengerRepository.save(passenger);
+    return passengerData;
   }
 }
 

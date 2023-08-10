@@ -1,18 +1,13 @@
 import Driver from '../../Driver';
-import { client } from '../../db';
+import DriverRepository from '../../infra/repository/DriverRepositoryDatabase';
 
 export default class CreateDriver {
-  constructor() {}
+  constructor(readonly driverRepository: DriverRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    try {
-      const driver = new Driver(input.name, input.email, input.document, input.carPlate);
-      await client.connect();
-      const data = await client.db('db1').collection('drivers').insertOne(driver);
-      return { driverId: data.insertedId.toString() };
-    } finally {
-      await client.close();
-    }
+    const driver = new Driver(input.name, input.email, input.document, input.carPlate);
+    const driverData = await this.driverRepository.save(driver);
+    return driverData;
   }
 }
 
