@@ -2,16 +2,16 @@ import CPFValidator from './CPFValidator';
 
 export default class Driver {
   constructor(
-    private name: string,
-    private email: string,
-    private document: string,
-    private carPlate: string
+    public name: string,
+    public email: string,
+    public document: string,
+    public carPlate: string
   ) {
     this.validateRequired();
     new CPFValidator(this.document).validate();
   }
 
-  validateRequired() {
+  private validateRequired() {
     if (!this.name) throw new Error('Name is required');
     if (!this.email) throw new Error('Email is required');
     if (!this.carPlate) throw new Error('Car plate is required');

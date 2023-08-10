@@ -1,5 +1,4 @@
-import Passenger from './Passenger';
-import { client } from './db';
+import CreatePassenger from './application/usecases/CreatePassenger';
 
 process.stdin.on('data', async (chunk) => {
   const command = chunk.toString().replace(/\n/, '');
@@ -7,11 +6,9 @@ process.stdin.on('data', async (chunk) => {
   try {
     if (command.startsWith('create-passenger')) {
       const [name, email, document] = command.replace('create-passenger', '').trim().split(' ');
-      console.log(name, email, document);
-      const passenger = new Passenger(name, email, document);
-      await client.connect();
-      await client.db('db1').collection('passengers').insertOne(passenger);
-      await client.close();
+      const usecase = new CreatePassenger();
+      const output = await usecase.execute({ name, email, document });
+      console.log(output);
     }
   } catch (e: any) {
     console.error(e.message);
