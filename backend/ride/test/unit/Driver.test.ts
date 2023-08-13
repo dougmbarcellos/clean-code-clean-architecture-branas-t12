@@ -4,8 +4,8 @@ test('Deve criar um motorista', () => {
   const driver = Driver.create('doug', 'doug@doug.com', '111.444.777-35', 'XYZ1230');
   expect(driver._id).toBeDefined();
   expect(driver.name).toBe('doug');
-  expect(driver.email.value).toEqual('doug@doug.com');
-  expect(driver.document.value).toEqual('111.444.777-35');
+  expect(driver.email.value).toBe('doug@doug.com');
+  expect(driver.document.value).toBe('111.444.777-35');
 });
 
 test('Não pode criar motorista com email inválido', async () => {

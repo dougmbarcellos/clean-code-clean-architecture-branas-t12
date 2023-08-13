@@ -1,4 +1,4 @@
-import Ride from '../src/Ride';
+import Ride from '../../src/application/domain/Ride';
 
 const coordsSaoRoque = [-19.7392195, -40.6681334];
 const coordsSaoRoqueCLAMAP = [-19.7392598, -40.6695496];
