@@ -1,10 +1,9 @@
-import { WithId } from 'mongodb';
-import Driver from '../../Driver';
+import Driver from '../domain/Driver';
 
 export default interface DriverRepository {
   save(driver: Driver): Promise<{
     driverId: string;
   }>;
 
-  get(driverId: string): Promise<WithId<Driver> | null>;
+  get(driverId: string): Promise<Driver>;
 }

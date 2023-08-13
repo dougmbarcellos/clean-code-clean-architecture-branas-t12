@@ -1,4 +1,4 @@
-import Passenger from '../../Passenger';
+import Passenger from '../domain/Passenger';
 import PassengerRepository from '../repository/PassengerRepository';
 
 export default class CreatePassenger {

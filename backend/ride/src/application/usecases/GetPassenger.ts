@@ -9,8 +9,8 @@ export default class GetPassenger {
     return {
       passengerId: passengerData._id.toString(),
       name: passengerData.name,
-      email: passengerData.email,
-      document: passengerData.document,
+      email: passengerData.email.value,
+      document: passengerData.document.value,
     };
   }
 }

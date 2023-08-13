@@ -1,10 +1,9 @@
-import { WithId } from 'mongodb';
-import Passenger from '../../Passenger';
+import Passenger from '../domain/Passenger';
 
 export default interface PassengerRepository {
   save(passenger: Passenger): Promise<{
     passengerId: string;
   }>;
 
-  get(passengerId: string): Promise<WithId<Passenger> | null>;
+  get(passengerId: string): Promise<Passenger>;
 }

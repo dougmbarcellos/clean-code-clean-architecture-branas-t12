@@ -12,5 +12,5 @@ test('Deve cadastrar e obter o passageiro', async function () {
   const outputCreate = await usecaseCreate.execute(input);
   const usecase = new GetPassenger(new PassengerRepositoryDatabase());
   const output = await usecase.execute(outputCreate);
-  expect(output).toEqual({ ...input, ...outputCreate });
+  expect(output).toEqual({ ...input, passengerId: outputCreate.passengerId });
 });

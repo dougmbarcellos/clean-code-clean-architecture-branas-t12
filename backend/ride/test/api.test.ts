@@ -56,7 +56,7 @@ test('Deve lançar um erro se o passageiro estiver com documento inválido', asy
 test('Deve cadastrar um motorista', async function () {
   const input = {
     name: 'Douglass',
-    email: 'doug@doug.brr',
+    email: 'doug@doug.com',
     document: '111.444.777-35',
     carPlate: 'XYZ1230',
   };

@@ -9,9 +9,9 @@ export default class GetDriver {
     return {
       driverId: driverData._id.toString(),
       name: driverData.name,
-      email: driverData.email,
-      document: driverData.document,
-      carPlate: driverData.carPlate,
+      email: driverData.email.value,
+      document: driverData.document.value,
+      carPlate: driverData.carPlate.value,
     };
   }
 }
