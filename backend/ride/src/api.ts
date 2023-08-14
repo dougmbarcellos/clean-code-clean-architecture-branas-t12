@@ -9,6 +9,7 @@ import GetDriver from './application/usecases/GetDriver';
 import GetPassenger from './application/usecases/GetPassenger';
 import GetRide from './application/usecases/GetRide';
 import RequestRide from './application/usecases/RequestRide';
+import StartRide from './application/usecases/StartRide';
 import DriverRepositoryDatabase from './infra/repository/DriverRepositoryDatabase';
 import PassengerRepositoryDatabase from './infra/repository/PassengerRepositoryDatabase';
 import RideRepositoryDatabase from './infra/repository/RideRepositoryDatabase';
@@ -99,6 +100,7 @@ function initRouter() {
         rideStatus: output.rideStatus.toString(),
         driverId: output.driverId,
         acceptDate: output.acceptDate,
+        startDate: output.startDate,
       });
     } catch (e) {
       res.status(422).send(e.message);
@@ -111,6 +113,18 @@ function initRouter() {
       const output = await usecase.execute({
         rideId: req.body.rideId,
         driverId: req.body.driverId,
+      });
+      res.json(output);
+    } catch (e) {
+      res.status(422).send(e.message);
+    }
+  });
+
+  app.post('/start_ride', async function (req, res) {
+    try {
+      const usecase = new StartRide(new RideRepositoryDatabase());
+      const output = await usecase.execute({
+        rideId: req.body.rideId,
       });
       res.json(output);
     } catch (e) {

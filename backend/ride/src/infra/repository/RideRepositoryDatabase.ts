@@ -20,6 +20,7 @@ export default class RideRepositoryDatabase implements RideRepository {
         rideStatus: ride.rideStatus,
         acceptDate: ride.acceptDate,
         driverId: ride.driverId,
+        startDate: ride.startDate,
       });
     await client.close();
     return { rideId: data.insertedId.toString() };
@@ -42,7 +43,8 @@ export default class RideRepositoryDatabase implements RideRepository {
       new Date(data.requestDate),
       data.rideStatus,
       data.acceptDate,
-      data.driverId
+      data.driverId,
+      data.startDate
     );
   }
 
@@ -60,6 +62,30 @@ export default class RideRepositoryDatabase implements RideRepository {
             driverId,
             acceptDate: new Date(),
             rideStatus: 'accepted',
+          },
+        },
+        {
+          returnDocument: 'after',
+        }
+      );
+    await client.close();
+
+    return output.value!;
+  }
+
+  async start(rideId: string) {
+    await client.connect();
+    const output = await client
+      .db('db1')
+      .collection('rides')
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(rideId),
+        },
+        {
+          $set: {
+            startDate: new Date(),
+            rideStatus: 'started',
           },
         },
         {

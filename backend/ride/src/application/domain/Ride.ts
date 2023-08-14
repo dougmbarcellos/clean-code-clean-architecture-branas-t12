@@ -15,13 +15,14 @@ export default class Ride {
     readonly segments: Segment[],
     readonly requestDate: Date,
     readonly rideStatus: string,
-    readonly acceptDate: null | Date,
-    readonly driverId: string | null
+    readonly acceptDate: Date | null,
+    readonly driverId: string | null,
+    readonly startDate: Date | null
   ) {}
 
   static create(passengerId: string, segment: Segment) {
     const _id = UUIDGenerator.create();
-    return new Ride(_id, passengerId, [segment], new Date(), 'waiting_driver', null, null);
+    return new Ride(_id, passengerId, [segment], new Date(), 'waiting_driver', null, null, null);
   }
 
   addSegment(segment: Segment) {
