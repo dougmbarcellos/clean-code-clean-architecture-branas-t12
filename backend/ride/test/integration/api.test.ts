@@ -87,6 +87,7 @@ test('Deve fazer uma requisição de corrida', async function () {
     passengerId: '64a32d0fe14712d428c5c66d',
     from: coordsSaoRoque,
     to: coordsSantaTeresa,
+    segmentDate: '2021-03-01T10:00:00',
   };
   const response1 = await axios.post('http://localhost:3000/request_ride', input);
   const output1 = response1.data;
@@ -103,6 +104,7 @@ test('Motorista deve aceitar uma corrida', async function () {
     passengerId: '64a32d0fe14712d428c5c66d',
     from: coordsSaoRoque,
     to: coordsSantaTeresa,
+    segmentDate: '2021-03-01T10:00:00',
   };
   const response1 = await axios.post('http://localhost:3000/request_ride', input1);
   const output1 = response1.data;

@@ -1,14 +1,17 @@
 // @ts-nocheck
 import express from 'express';
 import { ObjectId } from 'mongodb';
+import Segment from './application/domain/Segment';
 import CalculateRide from './application/usecases/CalculateRide';
 import CreateDriver from './application/usecases/CreateDriver';
 import CreatePassenger from './application/usecases/CreatePassenger';
 import GetDriver from './application/usecases/GetDriver';
 import GetPassenger from './application/usecases/GetPassenger';
+import RequestRide from './application/usecases/RequestRide';
 import { client } from './db';
 import DriverRepositoryDatabase from './infra/repository/DriverRepositoryDatabase';
 import PassengerRepositoryDatabase from './infra/repository/PassengerRepositoryDatabase';
+import RideRepositoryDatabase from './infra/repository/RideRepositoryDatabase';
 
 const app = express();
 
@@ -18,7 +21,12 @@ function initRouter() {
   app.post('/calculate_ride', async function (req, res) {
     try {
       const usecase = new CalculateRide();
-      const output = await usecase.execute({ segments: req.body.segments });
+      const input = {
+        segments: req.body.segments.map(
+          (segment) => new Segment(segment.from, segment.to, new Date(segment.date))
+        ),
+      };
+      const output = await usecase.execute(input);
       res.json(output);
     } catch (e) {
       res.status(422).send(e.message);
@@ -67,20 +75,16 @@ function initRouter() {
 
   app.post('/request_ride', async function (req, res) {
     try {
-      await client.connect();
-      const data = await client.db('db1').collection('rides').insertOne({
+      const usecase = new RequestRide(new RideRepositoryDatabase());
+      const output = await usecase.execute({
         passengerId: req.body.passengerId,
-        driverId: null,
         from: req.body.from,
         to: req.body.to,
-        requestDate: new Date(),
-        rideStatus: 'waiting_driver',
+        segmentDate: req.body.segmentDate,
       });
-      res.json({ rideId: data.insertedId });
+      res.json(output);
     } catch (e) {
       res.status(422).send(e.message);
-    } finally {
-      await client.close();
     }
   });
 
