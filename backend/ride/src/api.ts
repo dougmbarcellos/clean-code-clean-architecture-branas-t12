@@ -1,7 +1,7 @@
 // @ts-nocheck
 import express from 'express';
-import { ObjectId } from 'mongodb';
 import Segment from './application/domain/Segment';
+import AcceptRide from './application/usecases/AcceptRide';
 import CalculateRide from './application/usecases/CalculateRide';
 import CreateDriver from './application/usecases/CreateDriver';
 import CreatePassenger from './application/usecases/CreatePassenger';
@@ -9,7 +9,6 @@ import GetDriver from './application/usecases/GetDriver';
 import GetPassenger from './application/usecases/GetPassenger';
 import GetRide from './application/usecases/GetRide';
 import RequestRide from './application/usecases/RequestRide';
-import { client } from './db';
 import DriverRepositoryDatabase from './infra/repository/DriverRepositoryDatabase';
 import PassengerRepositoryDatabase from './infra/repository/PassengerRepositoryDatabase';
 import RideRepositoryDatabase from './infra/repository/RideRepositoryDatabase';
@@ -108,25 +107,14 @@ function initRouter() {
 
   app.post('/accept_ride', async function (req, res) {
     try {
-      await client.connect();
-      await client
-        .db('db1')
-        .collection('rides')
-        .updateOne(
-          { _id: new ObjectId(req.body.rideId) },
-          {
-            $set: {
-              driverId: req.body.driverId,
-              acceptDate: new Date(),
-              rideStatus: 'accepted',
-            },
-          }
-        );
-      res.json({});
+      const usecase = new AcceptRide(new RideRepositoryDatabase());
+      const output = await usecase.execute({
+        rideId: req.body.rideId,
+        driverId: req.body.driverId,
+      });
+      res.json(output);
     } catch (e) {
       res.status(422).send(e.message);
-    } finally {
-      await client.close();
     }
   });
 }

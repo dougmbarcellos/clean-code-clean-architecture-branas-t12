@@ -6,4 +6,6 @@ export default interface RideRepository {
   }>;
 
   get(rideId: string): Promise<Ride>;
+
+  accept(rideId: string, driverId: string): Promise<Object>;
 }

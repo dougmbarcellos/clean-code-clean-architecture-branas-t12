@@ -45,4 +45,29 @@ export default class RideRepositoryDatabase implements RideRepository {
       data.driverId
     );
   }
+
+  async accept(rideId: string, driverId: string) {
+    await client.connect();
+    const output = await client
+      .db('db1')
+      .collection('rides')
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(rideId),
+        },
+        {
+          $set: {
+            driverId,
+            acceptDate: new Date(),
+            rideStatus: 'accepted',
+          },
+        },
+        {
+          returnDocument: 'after',
+        }
+      );
+    await client.close();
+
+    return output.value!;
+  }
 }
