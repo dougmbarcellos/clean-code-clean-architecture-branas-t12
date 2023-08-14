@@ -96,4 +96,19 @@ export default class RideRepositoryDatabase implements RideRepository {
 
     return output.value!;
   }
+
+  async addSegment(rideId: string, segments: Segment[]) {
+    await client.connect();
+    const output = await client
+      .db('db1')
+      .collection('rides')
+      .findOneAndUpdate(
+        { _id: new ObjectId(rideId) },
+        { $set: { segments } },
+        { returnDocument: 'after' }
+      );
+    await client.close();
+
+    return output.value!;
+  }
 }

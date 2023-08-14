@@ -2,6 +2,7 @@
 import express from 'express';
 import Segment from './application/domain/Segment';
 import AcceptRide from './application/usecases/AcceptRide';
+import AddSegmentToRide from './application/usecases/AddSegmentToRide';
 import CalculateRide from './application/usecases/CalculateRide';
 import CreateDriver from './application/usecases/CreateDriver';
 import CreatePassenger from './application/usecases/CreatePassenger';
@@ -125,6 +126,19 @@ function initRouter() {
       const usecase = new StartRide(new RideRepositoryDatabase());
       const output = await usecase.execute({
         rideId: req.body.rideId,
+      });
+      res.json(output);
+    } catch (e) {
+      res.status(422).send(e.message);
+    }
+  });
+
+  app.post('/add_segment_to_ride', async function (req, res) {
+    try {
+      const usecase = new AddSegmentToRide(new RideRepositoryDatabase());
+      const output = await usecase.execute({
+        rideId: req.body.rideId,
+        to: req.body.to,
       });
       res.json(output);
     } catch (e) {

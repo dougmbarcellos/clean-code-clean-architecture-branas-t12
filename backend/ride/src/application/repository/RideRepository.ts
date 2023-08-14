@@ -1,4 +1,5 @@
 import Ride from '../domain/Ride';
+import Segment from '../domain/Segment';
 
 export default interface RideRepository {
   save(ride: Ride): Promise<{
@@ -10,4 +11,6 @@ export default interface RideRepository {
   accept(rideId: string, driverId: string): Promise<Object>;
 
   start(rideId: string): Promise<Object>;
+
+  addSegment(rideId: string, segments: Segment[]): Promise<Object>;
 }

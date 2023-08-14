@@ -146,3 +146,29 @@ test('Deve iniciar uma corrida', async function () {
   const output3 = response3.data;
   expect(output3.startDate).toBeDefined();
 });
+
+test('Deve adicionar um novo percuso a corrida', async function () {
+  const input1 = {
+    passengerId: '64a32d0fe14712d428c5c66d',
+    from: coordsSaoRoque,
+    to: coordsSantaTeresa,
+    segmentDate: '2021-03-01T10:00:00',
+  };
+  const response1 = await axios.post('http://localhost:3000/request_ride', input1);
+  const { rideId } = response1.data;
+
+  const input2 = {
+    rideId,
+    driverId: '64a32d2fe14712d428c5c66e',
+  };
+
+  await axios.post('http://localhost:3000/accept_ride', input2);
+
+  const input3 = { rideId };
+  await axios.post('http://localhost:3000/start_ride', input3);
+
+  const input4 = { rideId, to: coordsSaoRoqueCLAMAP };
+  const response4 = await axios.post('http://localhost:3000/add_segment_to_ride', input4);
+  const output4 = response4.data;
+  expect(output4.segments.length).toBe(2);
+});
