@@ -6,6 +6,7 @@ import AddSegmentToRide from './application/usecases/AddSegmentToRide';
 import CalculateRide from './application/usecases/CalculateRide';
 import CreateDriver from './application/usecases/CreateDriver';
 import CreatePassenger from './application/usecases/CreatePassenger';
+import EndRide from './application/usecases/EndRide';
 import GetDriver from './application/usecases/GetDriver';
 import GetPassenger from './application/usecases/GetPassenger';
 import GetRide from './application/usecases/GetRide';
@@ -102,6 +103,8 @@ function initRouter() {
         driverId: output.driverId,
         acceptDate: output.acceptDate,
         startDate: output.startDate,
+        endDate: output.endDate,
+        waitingDuration: output.waitingDuration,
       });
     } catch (e) {
       res.status(422).send(e.message);
@@ -139,6 +142,18 @@ function initRouter() {
       const output = await usecase.execute({
         rideId: req.body.rideId,
         to: req.body.to,
+      });
+      res.json(output);
+    } catch (e) {
+      res.status(422).send(e.message);
+    }
+  });
+
+  app.post('/end_ride', async function (req, res) {
+    try {
+      const usecase = new EndRide(new RideRepositoryDatabase());
+      const output = await usecase.execute({
+        rideId: req.body.rideId,
       });
       res.json(output);
     } catch (e) {

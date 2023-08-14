@@ -16,11 +16,13 @@ export default class RideRepositoryDatabase implements RideRepository {
         segments: ride.segments.map(({ from, to, date, distance }) => {
           return { from, to, date, distance };
         }),
-        requestDate: ride.requestDate,
+        requestDate: ride.requestDate ? new Date(ride.requestDate) : null,
         rideStatus: ride.rideStatus,
-        acceptDate: ride.acceptDate,
+        acceptDate: ride.acceptDate ? new Date(ride.acceptDate) : null,
         driverId: ride.driverId,
-        startDate: ride.startDate,
+        startDate: ride.startDate ? new Date(ride.startDate) : null,
+        endDate: ride.endDate ? new Date(ride.endDate) : null,
+        waitingDuration: ride.waitingDuration,
       });
     await client.close();
     return { rideId: data.insertedId.toString() };
@@ -44,7 +46,9 @@ export default class RideRepositoryDatabase implements RideRepository {
       data.rideStatus,
       data.acceptDate,
       data.driverId,
-      data.startDate
+      data.startDate,
+      data.endDate,
+      data.waitingDuration
     );
   }
 
@@ -109,6 +113,26 @@ export default class RideRepositoryDatabase implements RideRepository {
       );
     await client.close();
 
+    return output.value!;
+  }
+
+  async end(rideId: string, endDate: Date, waitingDuration: number) {
+    await client.connect();
+    const output = await client
+      .db('db1')
+      .collection('rides')
+      .findOneAndUpdate(
+        { _id: new ObjectId(rideId) },
+        {
+          $set: {
+            endDate,
+            waitingDuration,
+            rideStatus: 'ended',
+          },
+        },
+        { returnDocument: 'after' }
+      );
+    await client.close();
     return output.value!;
   }
 }

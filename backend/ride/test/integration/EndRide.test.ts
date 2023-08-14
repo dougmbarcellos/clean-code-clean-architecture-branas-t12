@@ -1,5 +1,6 @@
 import UUIDGenerator from '../../src/application/domain/UUIDGenerator';
 import AcceptRide from '../../src/application/usecases/AcceptRide';
+import EndRide from '../../src/application/usecases/EndRide';
 import RequestRide from '../../src/application/usecases/RequestRide';
 import StartRide from '../../src/application/usecases/StartRide';
 import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDatabase';
@@ -7,7 +8,7 @@ import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDat
 const coordsSaoRoque = [-19.7392195, -40.6681334];
 const coordsSantaTeresa = [-19.9320348, -40.6102108];
 
-test('Deve iniciar uma corrida', async () => {
+test('Deve encerrar a corrida', async () => {
   const usecaseRequestRide = new RequestRide(new RideRepositoryDatabase());
   const inputRequestRide = {
     passengerId: UUIDGenerator.create().toString(),
@@ -15,20 +16,23 @@ test('Deve iniciar uma corrida', async () => {
     to: coordsSantaTeresa,
     segmentDate: '2021-03-01T10:00:00',
   };
-  const outputRequestRide = await usecaseRequestRide.execute(inputRequestRide);
+  const { rideId } = await usecaseRequestRide.execute(inputRequestRide);
 
   const usecaseAcceptRide = new AcceptRide(new RideRepositoryDatabase());
   const inputAcceptRide = {
-    rideId: outputRequestRide.rideId,
+    rideId,
     driverId: UUIDGenerator.create().toString(),
   };
-  const outputAcceptRide = await usecaseAcceptRide.execute(inputAcceptRide);
+  await usecaseAcceptRide.execute(inputAcceptRide);
 
-  const usecase = new StartRide(new RideRepositoryDatabase());
-  const input = {
-    rideId: outputAcceptRide._id,
-  };
+  const usecaseStartRide = new StartRide(new RideRepositoryDatabase());
+  const inputStartRide = { rideId };
+  await usecaseStartRide.execute(inputStartRide);
+
+  const usecase = new EndRide(new RideRepositoryDatabase());
+  const input = { rideId };
   const output = await usecase.execute(input);
-  expect(output.rideStatus).toBe('started');
-  expect(output.startDate).toBeDefined();
+  expect(output.rideStatus).toBe('ended');
+  expect(output.endDate).toBeDefined();
+  expect(output.waitingDuration).toBeDefined();
 });

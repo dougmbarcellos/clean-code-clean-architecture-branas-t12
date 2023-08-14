@@ -1,4 +1,5 @@
 import axios from 'axios';
+import UUIDGenerator from '../../src/application/domain/UUIDGenerator';
 
 axios.defaults.validateStatus = function () {
   return true;
@@ -119,8 +120,8 @@ test('Motorista deve aceitar uma corrida', async function () {
 
   const response2 = await axios.get(`http://localhost:3000/rides/${output1.rideId}`);
   const output2 = response2.data;
-  expect(output2.acceptDate).toBeDefined();
   expect(output2.rideStatus).toBe('accepted');
+  expect(output2.acceptDate).toBeDefined();
 });
 
 test('Deve iniciar uma corrida', async function () {
@@ -144,6 +145,7 @@ test('Deve iniciar uma corrida', async function () {
   const input3 = { rideId: output1.rideId };
   const response3 = await axios.post('http://localhost:3000/start_ride', input3);
   const output3 = response3.data;
+  expect(output3.rideStatus).toBe('started');
   expect(output3.startDate).toBeDefined();
 });
 
@@ -171,4 +173,28 @@ test('Deve adicionar um novo percuso a corrida', async function () {
   const response4 = await axios.post('http://localhost:3000/add_segment_to_ride', input4);
   const output4 = response4.data;
   expect(output4.segments.length).toBe(2);
+});
+
+test.only('Deve encerrar uma corrida', async function () {
+  const input1 = {
+    passengerId: UUIDGenerator.create().toString(),
+    from: coordsSaoRoque,
+    to: coordsSantaTeresa,
+    segmentDate: '2021-03-01T10:00:00',
+  };
+  const response1 = await axios.post('http://localhost:3000/request_ride', input1);
+  const { rideId } = response1.data;
+
+  const input2 = {
+    rideId,
+    driverId: UUIDGenerator.create().toString(),
+  };
+  await axios.post('http://localhost:3000/accept_ride', input2);
+
+  const input3 = { rideId };
+  const response3 = await axios.post('http://localhost:3000/end_ride', input3);
+  const output3 = response3.data;
+  expect(output3.rideStatus).toBe('ended');
+  expect(output3.endDate).toBeDefined();
+  expect(output3.waitingDuration).toBeDefined();
 });

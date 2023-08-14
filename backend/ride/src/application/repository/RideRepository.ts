@@ -13,4 +13,6 @@ export default interface RideRepository {
   start(rideId: string): Promise<Object>;
 
   addSegment(rideId: string, segments: Segment[]): Promise<Object>;
+
+  end(rideId: string, endDate: Date, waitingDuration: number): Promise<Object>;
 }
