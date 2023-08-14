@@ -175,7 +175,7 @@ test('Deve adicionar um novo percuso a corrida', async function () {
   expect(output4.segments.length).toBe(2);
 });
 
-test.only('Deve encerrar uma corrida', async function () {
+test('Deve encerrar uma corrida', async function () {
   const input1 = {
     passengerId: UUIDGenerator.create().toString(),
     from: coordsSaoRoque,
