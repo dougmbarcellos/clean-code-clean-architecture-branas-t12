@@ -12,11 +12,13 @@ export default class RideRepositoryDatabase implements RideRepository {
       .collection('rides')
       .insertOne({
         _id: ride._id,
+        passengerId: ride.passengerId,
         segments: ride.segments.map(({ from, to, date, distance }) => {
           return { from, to, date, distance };
         }),
         requestDate: ride.requestDate,
         rideStatus: ride.rideStatus,
+        acceptDate: ride.acceptDate,
         driverId: ride.driverId,
       });
     await client.close();
@@ -39,6 +41,7 @@ export default class RideRepositoryDatabase implements RideRepository {
       segments,
       new Date(data.requestDate),
       data.rideStatus,
+      data.acceptDate,
       data.driverId
     );
   }

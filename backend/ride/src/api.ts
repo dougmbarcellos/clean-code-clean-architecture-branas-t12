@@ -7,6 +7,7 @@ import CreateDriver from './application/usecases/CreateDriver';
 import CreatePassenger from './application/usecases/CreatePassenger';
 import GetDriver from './application/usecases/GetDriver';
 import GetPassenger from './application/usecases/GetPassenger';
+import GetRide from './application/usecases/GetRide';
 import RequestRide from './application/usecases/RequestRide';
 import { client } from './db';
 import DriverRepositoryDatabase from './infra/repository/DriverRepositoryDatabase';
@@ -90,26 +91,18 @@ function initRouter() {
 
   app.get('/rides/:rideId', async function (req, res) {
     try {
-      await client.connect();
-      const data = await client
-        .db('db1')
-        .collection('rides')
-        .findOne(
-          { _id: new ObjectId(req.params.rideId) },
-          { rideId: 1, requestDate: 1, rideStatus: 1, passengerId: 1, driverId: 1, acceptDate: 1 }
-        );
+      const usecase = new GetRide(new RideRepositoryDatabase());
+      const output = await usecase.execute({ rideId: req.params.rideId });
       res.json({
-        rideId: data._id,
-        requestDate: data.requestDate,
-        rideStatus: data.rideStatus,
-        passengerId: data.passengerId,
-        driverId: data.driverId,
-        acceptDate: data.acceptDate,
+        rideId: output._id,
+        passengerId: output.passengerId,
+        requestDate: output.requestDate,
+        rideStatus: output.rideStatus.toString(),
+        driverId: output.driverId,
+        acceptDate: output.acceptDate,
       });
     } catch (e) {
       res.status(422).send(e.message);
-    } finally {
-      await client.close();
     }
   });
 
