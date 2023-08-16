@@ -3,7 +3,14 @@ import Driver from '../../src/application/domain/Driver';
 import DriverRepository from '../../src/application/repository/DriverRepository';
 import CreateDriver from '../../src/application/usecases/CreateDriver';
 import GetDriver from '../../src/application/usecases/GetDriver';
+import MongoClientAdapter from '../../src/infra/database/MongoClientAdapter';
 import DriverRepositoryDatabase from '../../src/infra/repository/DriverRepositoryDatabase';
+
+const connection = new MongoClientAdapter();
+
+// afterAll(async () => {
+//   await connection.close();
+// });
 
 // broad integration test
 test('Deve cadastrar um motorista', async function () {
@@ -13,7 +20,7 @@ test('Deve cadastrar um motorista', async function () {
     document: '111.444.777-35',
     carPlate: 'XYZ1230',
   };
-  const usecase = new CreateDriver(new DriverRepositoryDatabase());
+  const usecase = new CreateDriver(new DriverRepositoryDatabase(connection));
   const output = await usecase.execute(input);
   expect(output.driverId).toBeDefined();
 });
@@ -36,8 +43,11 @@ test('Deve obter o motorista', async function () {
       return Driver.create(input.name, input.email, input.document, input.carPlate);
     },
   };
+
+  // @ts-ignore
   const usecaseCreate = new CreateDriver(driverRepository);
   const outputCreate = await usecaseCreate.execute(input);
+  // @ts-ignore
   const usecase = new GetDriver(driverRepository);
   const output = await usecase.execute(outputCreate);
   expect(output.driverId).toBeDefined();

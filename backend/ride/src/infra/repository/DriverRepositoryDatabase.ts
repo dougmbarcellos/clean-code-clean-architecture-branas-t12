@@ -1,29 +1,29 @@
 import { ObjectId } from 'mongodb';
 import Driver from '../../application/domain/Driver';
 import DriverRepository from '../../application/repository/DriverRepository';
-import { client } from '../../db';
+import DatabaseConnection from '../database/DatabaseConnection';
 
+// Interface Adapter
 export default class DriverRepositoryDatabase implements DriverRepository {
+  constructor(readonly connection: DatabaseConnection) {}
+
   async save(driver: Driver) {
-    await client.connect();
-    const data = await client.db('db1').collection('drivers').insertOne({
+    const data = await this.connection.insertOne('drivers', {
       _id: driver._id,
       name: driver.name,
       email: driver.email.value,
       document: driver.document.value,
       carPlate: driver.carPlate.value,
     });
-    await client.close();
+    await this.connection.close();
     return { driverId: data.insertedId.toString() };
   }
 
   async get(driverId: string) {
-    await client.connect();
-    const data: any = await client
-      .db('db1')
-      .collection('drivers')
-      .findOne({ _id: new ObjectId(driverId) });
-    await client.close();
+    const data: any = await await this.connection.findOne('drivers', {
+      _id: new ObjectId(driverId),
+    });
+    await this.connection.close();
     return new Driver(data._id, data.name, data.email, data.document, data.carPlate);
   }
 }

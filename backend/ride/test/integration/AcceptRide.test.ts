@@ -2,13 +2,23 @@ import UUIDGenerator from '../../src/application/domain/UUIDGenerator';
 import AcceptRide from '../../src/application/usecases/AcceptRide';
 import GetRide from '../../src/application/usecases/GetRide';
 import RequestRide from '../../src/application/usecases/RequestRide';
+import MongoClientAdapter from '../../src/infra/database/MongoClientAdapter';
 import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDatabase';
 
 const coordsSaoRoque = [-19.7392195, -40.6681334];
 const coordsSantaTeresa = [-19.9320348, -40.6102108];
+const connection = new MongoClientAdapter();
+
+// beforeAll(async () => {
+//   await connection.open();
+// });
+
+// afterAll(async () => {
+//   await connection.close();
+// });
 
 test('Deve aceitar uma corrida', async () => {
-  const usecaseRequestRide = new RequestRide(new RideRepositoryDatabase());
+  const usecaseRequestRide = new RequestRide(new RideRepositoryDatabase(connection));
   const inputRequestRide = {
     passengerId: UUIDGenerator.create().toString(),
     from: coordsSaoRoque,
@@ -17,7 +27,7 @@ test('Deve aceitar uma corrida', async () => {
   };
   const outputRequestRide = await usecaseRequestRide.execute(inputRequestRide);
 
-  const usecase = new AcceptRide(new RideRepositoryDatabase());
+  const usecase = new AcceptRide(new RideRepositoryDatabase(connection));
   const input = {
     rideId: outputRequestRide.rideId,
     driverId: UUIDGenerator.create().toString(),
@@ -26,7 +36,7 @@ test('Deve aceitar uma corrida', async () => {
   expect(output.acceptDate).toBeDefined();
   expect(output.rideStatus).toBe('accepted');
 
-  const usecaseGedRide = new GetRide(new RideRepositoryDatabase());
+  const usecaseGedRide = new GetRide(new RideRepositoryDatabase(connection));
   const outputGedRide = await usecaseGedRide.execute(outputRequestRide);
   expect(outputGedRide.driverId).not.toBeNull();
   expect(outputGedRide.requestDate).not.toBeNull();
