@@ -1,4 +1,4 @@
-import Email from '../../src/application/domain/Email';
+import Email from '../../src/application/domain/person/Email';
 
 test('Deve validar o email', () => {
   const email = new Email('doug@doug.com');

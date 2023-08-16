@@ -1,5 +1,5 @@
-import Ride from '../../src/application/domain/Ride';
-import UUIDGenerator from '../../src/application/domain/UUIDGenerator';
+import UUIDGenerator from '../../src/application/domain/identity/UUIDGenerator';
+import Ride from '../../src/application/domain/ride/Ride';
 
 const coordsSaoRoque = [-19.7392195, -40.6681334];
 const coordsSaoRoqueCLAMAP = [-19.7392598, -40.6695496];

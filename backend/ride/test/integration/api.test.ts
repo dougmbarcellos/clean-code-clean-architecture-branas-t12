@@ -1,5 +1,5 @@
 import axios from 'axios';
-import UUIDGenerator from '../../src/application/domain/UUIDGenerator';
+import UUIDGenerator from '../../src/application/domain/identity/UUIDGenerator';
 
 axios.defaults.validateStatus = function () {
   return true;

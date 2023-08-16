@@ -1,7 +1,7 @@
+import Segment from '../ride/Segment';
 import NormalFareCalculator from './NormalFareCalculator';
 import OvernightFareCalculator from './OvernightFareCalculator';
 import OvernightSundayFareCalculator from './OvernightSundayFareCalculator';
-import Segment from './Segment';
 import SundayFareCalculator from './SundayFareCalculator';
 
 // Dynamic Static Factory.

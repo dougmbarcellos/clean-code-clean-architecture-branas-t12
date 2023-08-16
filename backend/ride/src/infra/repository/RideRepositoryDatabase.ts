@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
-import Position from '../../application/domain/Position';
-import Ride from '../../application/domain/Ride';
-import Segment from '../../application/domain/Segment';
+import Position from '../../application/domain/ride/Position';
+import Ride from '../../application/domain/ride/Ride';
+import Segment from '../../application/domain/ride/Segment';
 import RideRepository from '../../application/repository/RideRepository';
 import DatabaseConnection from '../database/DatabaseConnection';
 

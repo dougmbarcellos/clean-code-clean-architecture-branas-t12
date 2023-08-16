@@ -1,4 +1,4 @@
-import UUIDGenerator from '../../src/application/domain/UUIDGenerator';
+import UUIDGenerator from '../../src/application/domain/identity/UUIDGenerator';
 import AcceptRide from '../../src/application/usecases/AcceptRide';
 import RequestRide from '../../src/application/usecases/RequestRide';
 import StartRide from '../../src/application/usecases/StartRide';

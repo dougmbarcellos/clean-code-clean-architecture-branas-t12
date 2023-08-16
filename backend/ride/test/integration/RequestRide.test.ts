@@ -1,4 +1,4 @@
-import UUIDGenerator from '../../src/application/domain/UUIDGenerator';
+import UUIDGenerator from '../../src/application/domain/identity/UUIDGenerator';
 import RequestRide from '../../src/application/usecases/RequestRide';
 import MongoClientAdapter from '../../src/infra/database/MongoClientAdapter';
 import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDatabase';

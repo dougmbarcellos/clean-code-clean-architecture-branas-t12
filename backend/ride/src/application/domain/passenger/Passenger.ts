@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
-import Cpf from './Cpf';
-import Email from './Email';
-import UUIDGenerator from './UUIDGenerator';
+import UUIDGenerator from '../identity/UUIDGenerator';
+import Cpf from '../person/Cpf';
+import Email from '../person/Email';
 
 export default class Passenger {
   email: Email;

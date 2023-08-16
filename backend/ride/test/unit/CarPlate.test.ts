@@ -1,4 +1,4 @@
-import CarPlate from '../../src/application/domain/CarPlate';
+import CarPlate from '../../src/application/domain/driver/CarPlate';
 
 test('Deve testar uma placa válida', () => {
   const carPlate = new CarPlate('AAA9999');

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import Driver from '../../src/application/domain/Driver';
+import Driver from '../../src/application/domain/driver/Driver';
 import DriverRepository from '../../src/application/repository/DriverRepository';
 import CreateDriver from '../../src/application/usecases/CreateDriver';
 import GetDriver from '../../src/application/usecases/GetDriver';

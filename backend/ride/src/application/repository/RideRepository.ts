@@ -1,6 +1,6 @@
-import Position from '../domain/Position';
-import Ride from '../domain/Ride';
-import Segment from '../domain/Segment';
+import Position from '../domain/ride/Position';
+import Ride from '../domain/ride/Ride';
+import Segment from '../domain/ride/Segment';
 
 export default interface RideRepository {
   save(ride: Ride): Promise<any>;

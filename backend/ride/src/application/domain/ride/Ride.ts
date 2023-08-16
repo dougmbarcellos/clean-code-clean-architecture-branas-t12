@@ -1,9 +1,9 @@
 import { ObjectId } from 'mongodb';
-import DistanceCalculator from './DistanceCalculator';
-import FareCalculatorFactory from './FareCalculatorFactory';
+import DistanceCalculator from '../distance/DistanceCalculator';
+import FareCalculatorFactory from '../fare/FareCalculatorFactory';
+import UUIDGenerator from '../identity/UUIDGenerator';
 import Position from './Position';
 import Segment from './Segment';
-import UUIDGenerator from './UUIDGenerator';
 
 export default class Ride {
   segments: Segment[] = [];

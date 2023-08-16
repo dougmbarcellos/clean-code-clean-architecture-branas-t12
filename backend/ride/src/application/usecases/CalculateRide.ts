@@ -1,5 +1,5 @@
-import Ride from '../domain/Ride';
-import UUIDGenerator from '../domain/UUIDGenerator';
+import UUIDGenerator from '../domain/identity/UUIDGenerator';
+import Ride from '../domain/ride/Ride';
 
 export default class CalculateRide {
   constructor() {}

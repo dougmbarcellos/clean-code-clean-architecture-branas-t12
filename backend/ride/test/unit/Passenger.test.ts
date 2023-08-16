@@ -1,4 +1,4 @@
-import Passenger from '../../src/application/domain/Passenger';
+import Passenger from '../../src/application/domain/passenger/Passenger';
 
 test('Deve criar um passageiro', () => {
   const passenger = Passenger.create('doug', 'doug@doug.com', '111.444.777-35');

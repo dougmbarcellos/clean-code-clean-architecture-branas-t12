@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import Passenger from '../../application/domain/Passenger';
+import Passenger from '../../application/domain/passenger/Passenger';
 import PassengerRepository from '../../application/repository/PassengerRepository';
 import DatabaseConnection from '../database/DatabaseConnection';
 

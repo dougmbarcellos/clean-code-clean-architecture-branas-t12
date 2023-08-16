@@ -1,4 +1,4 @@
-import Cpf from '../../src/application/domain/Cpf';
+import Cpf from '../../src/application/domain/person/Cpf';
 
 test.each(['342.701.900-43', '34270190043'])('deve testar CPFs válidos', (value: string) => {
   const cpf = new Cpf(value);

@@ -1,8 +1,8 @@
 import { ObjectId } from 'mongodb';
+import UUIDGenerator from '../identity/UUIDGenerator';
+import Cpf from '../person/Cpf';
+import Email from '../person/Email';
 import CarPlate from './CarPlate';
-import Cpf from './Cpf';
-import Email from './Email';
-import UUIDGenerator from './UUIDGenerator';
 
 export default class Driver {
   email: Email;
