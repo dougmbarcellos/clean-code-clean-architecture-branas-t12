@@ -61,7 +61,7 @@ test('Deve aceitar uma corrida', function () {
   ride.addPosition(coordsSaoRoque[0], coordsSaoRoque[1], new Date('2021-03-01T10:00:00'));
   ride.addPosition(coordsSantaTeresa[0], coordsSantaTeresa[1], new Date('2021-03-01T10:00:00'));
   ride.accept(UUIDGenerator.create().toString(), new Date('2021-03-01T10:00:00'));
-  expect(ride.rideStatus).toBe('accepted');
+  expect(ride.rideStatus.value).toBe('accepted');
   expect(ride.driverId).toBeDefined();
   expect(ride.acceptDate).toBeInstanceOf(Date);
 });
@@ -72,7 +72,7 @@ test('Deve iniciar uma corrida', function () {
   ride.addPosition(coordsSantaTeresa[0], coordsSantaTeresa[1], new Date('2021-03-01T10:00:00'));
   ride.accept(UUIDGenerator.create().toString(), new Date('2021-03-01T10:00:00'));
   ride.start(new Date('2021-03-01T10:00:00'));
-  expect(ride.rideStatus).toBe('started');
+  expect(ride.rideStatus.value).toBe('started');
   expect(ride.startDate).toBeInstanceOf(Date);
 });
 
@@ -83,6 +83,21 @@ test('Deve encerrar uma corrida', function () {
   ride.accept(UUIDGenerator.create().toString(), new Date('2021-03-01T10:00:00'));
   ride.start(new Date('2021-03-01T10:00:00'));
   ride.end(new Date('2021-03-01T10:00:00'));
-  expect(ride.rideStatus).toBe('ended');
+  expect(ride.rideStatus.value).toBe('ended');
   expect(ride.endDate).toBeInstanceOf(Date);
+});
+
+test('Não deve iniciar corrida se ela não estiver sido aceita', function () {
+  const ride = Ride.create(UUIDGenerator.create().toString());
+  ride.addPosition(coordsSaoRoque[0], coordsSaoRoque[1], new Date('2021-03-01T10:00:00'));
+  ride.addPosition(coordsSantaTeresa[0], coordsSantaTeresa[1], new Date('2021-03-01T10:00:00'));
+  expect(() => ride.start(new Date('2021-03-01T10:00:00'))).toThrow(new Error('Invalid status'));
+});
+
+test('Não deve encerrar corrida se ela não estiver sido iniciada', function () {
+  const ride = Ride.create(UUIDGenerator.create().toString());
+  ride.addPosition(coordsSaoRoque[0], coordsSaoRoque[1], new Date('2021-03-01T10:00:00'));
+  ride.addPosition(coordsSantaTeresa[0], coordsSantaTeresa[1], new Date('2021-03-01T10:00:00'));
+  ride.accept(UUIDGenerator.create().toString(), new Date('2021-03-01T10:00:00'));
+  expect(() => ride.end(new Date('2021-03-01T10:00:00'))).toThrow(new Error('Invalid status'));
 });

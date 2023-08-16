@@ -67,7 +67,7 @@ export default class MainController {
         segments: output.segments,
         positions: output.positions,
         requestDate: output.requestDate,
-        rideStatus: output.rideStatus.toString(),
+        rideStatus: output.rideStatus.value,
         driverId: output.driverId,
         acceptDate: output.acceptDate,
         startDate: output.startDate,

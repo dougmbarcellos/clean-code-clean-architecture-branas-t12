@@ -23,7 +23,7 @@ test('Deve obter os dados da corrida', async () => {
   const output = await usecase.execute({ rideId: outputRequestRide._id });
   expect(output._id.toString()).toBe(outputRequestRide._id.toString());
   expect(output.passengerId).toBe(input.passengerId);
-  expect(output.rideStatus).toBe('waiting_driver');
+  expect(output.rideStatus.value).toBe('requested');
   expect(output.requestDate).toBeDefined();
   expect(output.positions.length).toBe(2);
   expect(output.acceptDate).toBeNull();

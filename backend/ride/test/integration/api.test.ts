@@ -104,7 +104,7 @@ test('Deve fazer uma requisição de corrida', async function () {
   const response2 = await axios.get(`http://localhost:3000/rides/${output1._id}`);
   const output2 = response2.data;
   expect(output2.requestDate).toBeDefined();
-  expect(output2.rideStatus).toBe('waiting_driver');
+  expect(output2.rideStatus).toBe('requested');
 });
 
 test('Motorista deve aceitar uma corrida', async function () {
@@ -209,10 +209,15 @@ test('Deve encerrar uma corrida', async function () {
   };
   await axios.post('http://localhost:3000/accept_ride', input2);
 
-  const input3 = { rideId };
-  const response3 = await axios.post('http://localhost:3000/end_ride', input3);
-  const output3 = response3.data;
-  expect(output3.rideStatus).toBe('ended');
-  expect(output3.endDate).toBeDefined();
-  expect(output3.waitingDuration).toBeDefined();
+  const input3 = {
+    rideId,
+  };
+  await axios.post('http://localhost:3000/start_ride', input3);
+
+  const input4 = { rideId };
+  const response4 = await axios.post('http://localhost:3000/end_ride', input4);
+  const output4 = response4.data;
+  expect(output4.rideStatus).toBe('ended');
+  expect(output4.endDate).toBeDefined();
+  expect(output4.waitingDuration).toBeDefined();
 });
