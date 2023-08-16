@@ -19,12 +19,12 @@ export default class Ride {
     readonly _id: ObjectId,
     readonly passengerId: string,
     readonly requestDate: Date,
-    readonly rideStatus: string,
-    readonly acceptDate: Date | null,
-    readonly driverId: string | null,
-    readonly startDate: Date | null,
-    readonly endDate: Date | null,
-    readonly waitingDuration: number | null
+    public rideStatus: string,
+    public acceptDate: Date | null,
+    public driverId: string | null,
+    public startDate: Date | null,
+    public endDate: Date | null,
+    public waitingDuration: number | null
   ) {
     const overnightSundayFareCalculatorHandler = new OvernightSundayFareCalculatorHandler();
     const sundayFareCalculatorHandler = new SundayFareCalculatorHandler(
@@ -56,5 +56,22 @@ export default class Ride {
       price += this.fareCalculator.handle(segment);
     }
     return price < this.MIN_PRICE ? this.MIN_PRICE : parseFloat(price.toFixed(2));
+  }
+
+  accept(driverId: string, date: Date) {
+    this.driverId = driverId;
+    this.acceptDate = date;
+    this.rideStatus = 'accepted';
+  }
+
+  start(date: Date) {
+    this.startDate = date;
+    this.rideStatus = 'started';
+  }
+
+  end(date: Date) {
+    this.endDate = date;
+    this.rideStatus = 'ended';
+    this.waitingDuration = this.endDate.valueOf() - new Date(this.startDate!).valueOf();
   }
 }

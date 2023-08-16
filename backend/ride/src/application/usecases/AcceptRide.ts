@@ -4,7 +4,9 @@ export default class AcceptRide {
   constructor(readonly rideRepository: RideRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const output = await this.rideRepository.accept(input.rideId, input.driverId);
+    const ride = await this.rideRepository.get(input.rideId);
+    ride.accept(input.driverId, new Date());
+    const output = await this.rideRepository.update(ride);
     return output;
   }
 }

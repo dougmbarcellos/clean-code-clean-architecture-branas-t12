@@ -10,7 +10,7 @@ export default class RequestRide {
       ride.addPosition(position.lat, position.long, new Date(position.date));
     }
     ride.calculate();
-    const output = await this.rideRepository.save(ride);
+    const output = await this.rideRepository.insert(ride);
     return output;
   }
 }

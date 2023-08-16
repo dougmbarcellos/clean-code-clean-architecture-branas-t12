@@ -7,11 +7,7 @@ export default class AddSegmentToRide {
     const ride = await this.rideRepository.get(input.rideId);
     ride.addPosition(input.position.lat, input.position.long, new Date(input.position.date));
     ride.calculate();
-    const output = await this.rideRepository.updateSegments(
-      ride._id.toString(),
-      ride.positions,
-      ride.segments
-    );
+    const output = await this.rideRepository.update(ride);
     return output;
   }
 }

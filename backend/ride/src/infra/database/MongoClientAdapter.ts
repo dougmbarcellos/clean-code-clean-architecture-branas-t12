@@ -16,6 +16,17 @@ export default class MongoClientAdapter implements DatabaseConnection {
     );
   }
 
+  async updateOne(collectionName: string, ...args: any) {
+    await client.connect();
+    return (
+      client
+        .db('db1')
+        .collection(collectionName)
+        // @ts-ignore
+        .updateOne(...args)
+    );
+  }
+
   async findOneAndUpdate(collectionName: string, ...args: any) {
     await client.connect();
     return (

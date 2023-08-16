@@ -4,7 +4,9 @@ export default class StartRide {
   constructor(readonly rideRepository: RideRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const output = await this.rideRepository.start(input.rideId);
+    const ride = await this.rideRepository.get(input.rideId);
+    ride.start(new Date());
+    const output = await this.rideRepository.update(ride);
     return output;
   }
 }

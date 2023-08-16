@@ -2,6 +2,7 @@
 export default interface DatabaseConnection {
   insertOne(collectionName: string, ...args: any): Promise<any>;
   findOne(collectionName: string, ...args: any): Promise<any>;
+  updateOne(collectionName: string, ...args: any): Promise<any>;
   findOneAndUpdate(collectionName: string, ...args: any): Promise<any>;
   close(): Promise<void>;
 }
