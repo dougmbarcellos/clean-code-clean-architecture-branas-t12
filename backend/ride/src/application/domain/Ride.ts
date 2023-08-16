@@ -1,4 +1,6 @@
 import { ObjectId } from 'mongodb';
+import DistanceCalculator from './DistanceCalculator';
+import Position from './Position';
 import Segment from './Segment';
 import UUIDGenerator from './UUIDGenerator';
 
@@ -9,10 +11,12 @@ export default class Ride {
   NORMAL_FARE = 2.1;
   MIN_PRICE = 10;
 
+  segments: Segment[] = [];
+  positions: Position[] = [];
+
   constructor(
     readonly _id: ObjectId,
     readonly passengerId: string,
-    readonly segments: Segment[],
     readonly requestDate: Date,
     readonly rideStatus: string,
     readonly acceptDate: Date | null,
@@ -22,29 +26,22 @@ export default class Ride {
     readonly waitingDuration: number | null
   ) {}
 
-  static create(passengerId: string, segment: Segment) {
+  static create(passengerId: string) {
     const _id = UUIDGenerator.create();
-    return new Ride(
-      _id,
-      passengerId,
-      [segment],
-      new Date(),
-      'waiting_driver',
-      null,
-      null,
-      null,
-      null,
-      null
-    );
+    return new Ride(_id, passengerId, new Date(), 'waiting_driver', null, null, null, null, null);
   }
 
-  addSegment(segment: Segment) {
-    this.segments.push(segment);
+  addPosition(lat: number, long: number, date: Date) {
+    this.positions.push(new Position(lat, long, date));
   }
 
   calculate() {
     let price = 0;
-    for (const segment of this.segments) {
+    for (const [index, position] of this.positions.entries()) {
+      const nextPosition = this.positions[index + 1];
+      if (!nextPosition) break;
+      const distance = DistanceCalculator.calculate(position.coord, nextPosition.coord);
+      const segment = new Segment(distance, nextPosition.date);
       if (segment.isOvernight() && !segment.isSunday()) {
         price += segment.distance * this.OVERNIGHT_FARE;
       }

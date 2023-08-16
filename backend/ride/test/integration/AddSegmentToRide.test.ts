@@ -11,19 +11,16 @@ const coordsSaoRoqueCLAMAP = [-19.7392598, -40.6695496];
 const coordsSantaTeresa = [-19.9320348, -40.6102108];
 const connection = new MongoClientAdapter();
 
-// afterAll(async () => {
-//   await connection.close();
-// });
-
 test('Deve adicionar novo percurso', async () => {
   const usecaseRequestRide = new RequestRide(new RideRepositoryDatabase(connection));
   const inputRequestRide = {
     passengerId: UUIDGenerator.create().toString(),
-    from: coordsSaoRoque,
-    to: coordsSantaTeresa,
-    segmentDate: '2021-03-01T10:00:00',
+    positions: [
+      { lat: coordsSaoRoque[0], long: coordsSaoRoque[1], date: '2021-03-01T10:00:00' },
+      { lat: coordsSantaTeresa[0], long: coordsSantaTeresa[1], date: '2021-03-01T10:00:00' },
+    ],
   };
-  const { rideId } = await usecaseRequestRide.execute(inputRequestRide);
+  const { _id: rideId } = await usecaseRequestRide.execute(inputRequestRide);
 
   const usecaseAcceptRide = new AcceptRide(new RideRepositoryDatabase(connection));
   const inputAcceptRide = {
@@ -41,8 +38,12 @@ test('Deve adicionar novo percurso', async () => {
   const usecase = new AddSegmentToRide(new RideRepositoryDatabase(connection));
   const input = {
     rideId,
-    to: coordsSaoRoqueCLAMAP,
+    position: {
+      lat: coordsSaoRoqueCLAMAP[0],
+      long: coordsSaoRoqueCLAMAP[1],
+      date: '2021-03-01T10:00:00',
+    },
   };
   const output = await usecase.execute(input);
-  expect(output.segments.length).toBe(2);
+  expect(output.positions.length).toBe(3);
 });

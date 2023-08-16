@@ -1,13 +1,15 @@
 import Ride from '../domain/Ride';
-import Segment from '../domain/Segment';
 import RideRepository from '../repository/RideRepository';
 
 export default class RequestRide {
   constructor(private rideRepository: RideRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const segment = new Segment(input.from, input.to, new Date(input.segmentDate));
-    const ride = Ride.create(input.passengerId, segment);
+    const ride = Ride.create(input.passengerId);
+    for (const position of input.positions) {
+      ride.addPosition(position.lat, position.long, new Date(position.date));
+    }
+    ride.calculate();
     const output = await this.rideRepository.save(ride);
     return output;
   }
@@ -15,11 +17,9 @@ export default class RequestRide {
 
 type Input = {
   passengerId: string;
-  from: number[];
-  to: number[];
-  segmentDate: string;
+  positions: { lat: number; long: number; date: string }[];
 };
 
 type Output = {
-  rideId: string;
+  _id: string;
 };

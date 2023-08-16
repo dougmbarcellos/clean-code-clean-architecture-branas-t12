@@ -1,15 +1,13 @@
 import Ride from '../domain/Ride';
-import Segment from '../domain/Segment';
 import UUIDGenerator from '../domain/UUIDGenerator';
 
 export default class CalculateRide {
   constructor() {}
 
   async execute(input: Input): Promise<Output> {
-    const [firstSegment, ...nextSegments] = input.segments;
-    const ride = Ride.create(UUIDGenerator.create().toString(), firstSegment);
-    for (const segment of nextSegments) {
-      ride.addSegment(segment);
+    const ride = Ride.create(UUIDGenerator.create().toString());
+    for (const position of input.positions) {
+      ride.addPosition(position.lat, position.long, new Date(position.date));
     }
     const price = ride.calculate();
 
@@ -18,7 +16,7 @@ export default class CalculateRide {
 }
 
 type Input = {
-  segments: Segment[];
+  positions: { lat: number; long: number; date: string }[];
 };
 
 type Output = {

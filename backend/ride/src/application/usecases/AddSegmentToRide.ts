@@ -1,24 +1,24 @@
-import Segment from '../domain/Segment';
 import RideRepository from '../repository/RideRepository';
 
 export default class AddSegmentToRide {
   constructor(readonly rideRepository: RideRepository) {}
 
   async execute(input: Input): Promise<Output> {
-    const outputGet = await this.rideRepository.get(input.rideId);
-
-    const [lastSegment] = outputGet.segments.slice(-1);
-    const newSegment = new Segment(lastSegment.to, input.to, new Date());
-    const segments = [...outputGet.segments, newSegment];
-
-    const output = await this.rideRepository.addSegment(input.rideId, segments);
+    const ride = await this.rideRepository.get(input.rideId);
+    ride.addPosition(input.position.lat, input.position.long, new Date(input.position.date));
+    ride.calculate();
+    const output = await this.rideRepository.updateSegments(
+      ride._id.toString(),
+      ride.positions,
+      ride.segments
+    );
     return output;
   }
 }
 
 type Input = {
   rideId: string;
-  to: number[];
+  position: { lat: number; long: number; date: string };
 };
 
 type Output = any;

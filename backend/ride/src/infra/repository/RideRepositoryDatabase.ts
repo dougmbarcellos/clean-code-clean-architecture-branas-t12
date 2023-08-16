@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import Position from '../../application/domain/Position';
 import Ride from '../../application/domain/Ride';
 import Segment from '../../application/domain/Segment';
 import RideRepository from '../../application/repository/RideRepository';
@@ -8,12 +9,11 @@ import DatabaseConnection from '../database/DatabaseConnection';
 export default class RideRepositoryDatabase implements RideRepository {
   constructor(readonly connection: DatabaseConnection) {}
   async save(ride: Ride) {
-    const data = await this.connection.insertOne('rides', {
+    const data = {
       _id: ride._id,
       passengerId: ride.passengerId,
-      segments: ride.segments.map(({ from, to, date, distance }) => {
-        return { from, to, date, distance };
-      }),
+      segments: ride.segments,
+      positions: ride.positions,
       requestDate: ride.requestDate ? new Date(ride.requestDate) : null,
       rideStatus: ride.rideStatus,
       acceptDate: ride.acceptDate ? new Date(ride.acceptDate) : null,
@@ -21,21 +21,18 @@ export default class RideRepositoryDatabase implements RideRepository {
       startDate: ride.startDate ? new Date(ride.startDate) : null,
       endDate: ride.endDate ? new Date(ride.endDate) : null,
       waitingDuration: ride.waitingDuration,
-    });
+    };
+    await this.connection.insertOne('rides', data);
     await this.connection.close();
-    return { rideId: data.insertedId.toString() };
+    return data;
   }
 
   async get(rideId: string) {
     const data: any = await this.connection.findOne('rides', { _id: new ObjectId(rideId) });
-    const segments = (<Segment[]>data.segments).map(
-      ({ from, to, date }) => new Segment(from, to, new Date(date))
-    );
     await this.connection.close();
-    return new Ride(
+    const ride = new Ride(
       data._id,
       data.passengerId,
-      segments,
       new Date(data.requestDate),
       data.rideStatus,
       data.acceptDate,
@@ -44,6 +41,14 @@ export default class RideRepositoryDatabase implements RideRepository {
       data.endDate,
       data.waitingDuration
     );
+
+    if (data.positions) {
+      for (const position of data.positions) {
+        ride.addPosition(position.lat, position.long, new Date(position.date));
+      }
+    }
+    ride.calculate();
+    return ride;
   }
 
   async accept(rideId: string, driverId: string) {
@@ -79,11 +84,11 @@ export default class RideRepositoryDatabase implements RideRepository {
     return output.value!;
   }
 
-  async addSegment(rideId: string, segments: Segment[]) {
+  async updateSegments(rideId: string, positions: Position[], segments: Segment[]) {
     const output = await this.connection.findOneAndUpdate(
       'rides',
       { _id: new ObjectId(rideId) },
-      { $set: { segments } },
+      { $set: { positions, segments } },
       { returnDocument: 'after' }
     );
     await this.connection.close();

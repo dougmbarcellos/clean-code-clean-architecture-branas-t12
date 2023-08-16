@@ -1,4 +1,3 @@
-import Segment from '../../application/domain/Segment';
 import AcceptRide from '../../application/usecases/AcceptRide';
 import AddSegmentToRide from '../../application/usecases/AddSegmentToRide';
 import CalculateRide from '../../application/usecases/CalculateRide';
@@ -28,12 +27,7 @@ export default class MainController {
     endRide: EndRide
   ) {
     httpServer.on('post', '/calculate_ride', async function (params: any, body: any) {
-      const input = {
-        segments: body.segments.map(
-          (segment: any) => new Segment(segment.from, segment.to, new Date(segment.date))
-        ),
-      };
-      const output = await calculateRide.execute(input);
+      const output = await calculateRide.execute({ positions: body.positions });
       return output;
     });
 
@@ -60,9 +54,7 @@ export default class MainController {
     httpServer.on('post', '/request_ride', async function (params: any, body: any) {
       const output = await requestRide.execute({
         passengerId: body.passengerId,
-        from: body.from,
-        to: body.to,
-        segmentDate: body.segmentDate,
+        positions: body.positions,
       });
       return output;
     });
@@ -72,6 +64,8 @@ export default class MainController {
       return {
         rideId: output._id,
         passengerId: output.passengerId,
+        segments: output.segments,
+        positions: output.positions,
         requestDate: output.requestDate,
         rideStatus: output.rideStatus.toString(),
         driverId: output.driverId,
@@ -100,7 +94,7 @@ export default class MainController {
     httpServer.on('post', '/add_segment_to_ride', async function (params: any, body: any) {
       const output = await addSegmentToRide.execute({
         rideId: body.rideId,
-        to: body.to,
+        position: body.position,
       });
       return output;
     });

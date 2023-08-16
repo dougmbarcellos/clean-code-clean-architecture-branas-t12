@@ -8,27 +8,24 @@ const coordsSaoRoque = [-19.7392195, -40.6681334];
 const coordsSantaTeresa = [-19.9320348, -40.6102108];
 const connection = new MongoClientAdapter();
 
-// afterAll(async () => {
-//   await connection.close();
-// });
-
 test('Deve obter os dados da corrida', async () => {
   const usecaseRequestRide = new RequestRide(new RideRepositoryDatabase(connection));
   const input = {
     passengerId: UUIDGenerator.create().toString(),
-    from: coordsSaoRoque,
-    to: coordsSantaTeresa,
-    segmentDate: '2021-03-01T10:00:00',
+    positions: [
+      { lat: coordsSaoRoque[0], long: coordsSaoRoque[1], date: '2021-03-01T10:00:00' },
+      { lat: coordsSantaTeresa[0], long: coordsSantaTeresa[1], date: '2021-03-01T10:00:00' },
+    ],
   };
   const outputRequestRide = await usecaseRequestRide.execute(input);
 
   const usecase = new GetRide(new RideRepositoryDatabase(connection));
-  const output = await usecase.execute(outputRequestRide);
-  expect(output._id.toString()).toBe(outputRequestRide.rideId);
+  const output = await usecase.execute({ rideId: outputRequestRide._id });
+  expect(output._id.toString()).toBe(outputRequestRide._id.toString());
   expect(output.passengerId).toBe(input.passengerId);
   expect(output.rideStatus).toBe('waiting_driver');
   expect(output.requestDate).toBeDefined();
-  expect(output.segments.length).toBe(1);
+  expect(output.positions.length).toBe(2);
   expect(output.acceptDate).toBeNull();
   expect(output.driverId).toBeNull();
 });
