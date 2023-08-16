@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import DistanceCalculator from '../distance/DistanceCalculator';
-import FareCalculatorFactory from '../fare/FareCalculatorFactory';
+import FareCalculatorFactory from '../fare/strategy/FareCalculatorFactory';
 import UUIDGenerator from '../identity/UUIDGenerator';
 import Position from './Position';
 import Segment from './Segment';
