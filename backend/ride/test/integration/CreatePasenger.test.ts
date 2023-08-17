@@ -4,10 +4,6 @@ import PassengerRepositoryDatabase from '../../src/infra/repository/PassengerRep
 
 const connection = new MongoClientAdapter();
 
-// afterAll(async () => {
-//   await connection.close();
-// });
-
 test('Deve cadastrar um passageiro', async function () {
   const input = {
     name: 'Douglas',
