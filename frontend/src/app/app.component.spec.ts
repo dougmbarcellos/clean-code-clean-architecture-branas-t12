@@ -1,21 +1,17 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  let fixture: ComponentFixture<AppComponent>;
-  let app: AppComponent;
-
-  beforeEach(() => {
+  beforeEach(() =>
     TestBed.configureTestingModule({
-      imports: [AppComponent, HttpClientTestingModule],
-    });
+      imports: [AppComponent, RouterTestingModule],
+    })
+  );
 
-    fixture = TestBed.createComponent(AppComponent);
-    app = fixture.componentInstance;
-  });
-
-  it('deve ser criado', () => {
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 });
