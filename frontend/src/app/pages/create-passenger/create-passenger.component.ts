@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormControlsBy } from 'src/app/domain/FormControlsBy';
-import Passenger from 'src/app/domain/Passenger';
-import { CreatePassengerService } from './services/create-passenger.service';
+import { FormControlsBy } from 'src/app/domain/form-controls-by';
+import Passenger from 'src/app/domain/passenger';
+import { PassengerService } from 'src/app/infra/services/passenger.service';
 
 @Component({
   standalone: true,
@@ -12,7 +12,7 @@ import { CreatePassengerService } from './services/create-passenger.service';
   styleUrls: ['./create-passenger.component.scss'],
 })
 export class CreatePassengerComponent {
-  private createPassengerService = inject(CreatePassengerService);
+  private passengerService = inject(PassengerService);
   private fb = inject(FormBuilder);
   formGroup = this.fb.group<FormControlsBy<Passenger>>({
     id: this.fb.control({ value: '', disabled: true }),
@@ -24,10 +24,8 @@ export class CreatePassengerComponent {
   });
 
   createPassenger() {
-    this.createPassengerService
-      .createPassenger(this.formGroup.getRawValue())
-      .subscribe((response) => {
-        this.formGroup.controls.id.setValue(response.passengerId);
-      });
+    this.passengerService.save(this.formGroup.getRawValue()).subscribe((response) => {
+      this.formGroup.controls.id.setValue(response.passengerId);
+    });
   }
 }

@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import Driver from 'src/app/domain/Driver';
-import { FormControlsBy } from 'src/app/domain/FormControlsBy';
-import { CreateDriverService } from './services/create-driver.service';
+import Driver from 'src/app/domain/driver';
+import { FormControlsBy } from 'src/app/domain/form-controls-by';
+import { DriverService } from 'src/app/infra/services/driver.service';
 
 @Component({
   standalone: true,
@@ -12,7 +12,7 @@ import { CreateDriverService } from './services/create-driver.service';
   styleUrls: ['./create-driver.component.scss'],
 })
 export class CreateDriverComponent {
-  private createDriverService = inject(CreateDriverService);
+  private driverService = inject(DriverService);
   private fb = inject(FormBuilder);
   formGroup = this.fb.group<FormControlsBy<Driver>>({
     id: this.fb.control({ value: '', disabled: true }),
@@ -25,7 +25,7 @@ export class CreateDriverComponent {
   });
 
   createDriver() {
-    this.createDriverService.createDriver(this.formGroup.getRawValue()).subscribe((response) => {
+    this.driverService.save(this.formGroup.getRawValue()).subscribe((response) => {
       this.formGroup.controls.id.setValue(response.driverId);
     });
   }

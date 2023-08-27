@@ -1,16 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 
+import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { CreatePassengerService } from './create-passenger.service';
+import { HttpClientService } from './http-client.service';
 
-describe('CreatePassengerService', () => {
-  let service: CreatePassengerService;
+describe('HttpClientService', () => {
+  let service: HttpClientService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [{ provide: HttpClientService, useClass: HttpClient }],
     });
-    service = TestBed.inject(CreatePassengerService);
+    service = TestBed.inject(HttpClientService);
   });
 
   it('should be created', () => {

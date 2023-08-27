@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
+import { HttpClientService } from 'src/app/infra/http/http-client.service';
 import { CreateDriverComponent } from './create-driver.component';
 
 describe('CreateDriverComponent', () => {
@@ -14,6 +15,7 @@ describe('CreateDriverComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CreateDriverComponent, HttpClientTestingModule],
+      providers: [{ provide: HttpClientService, useClass: HttpClient }],
     });
 
     fixture = TestBed.createComponent(CreateDriverComponent);
@@ -27,7 +29,7 @@ describe('CreateDriverComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // narrow
+  // narrow integration test
   it('deve preencher os campos e executar a ação', async () => {
     component.formGroup.controls.name.setValue('Doug');
     component.formGroup.controls.email.setValue('doug@doug.com');
