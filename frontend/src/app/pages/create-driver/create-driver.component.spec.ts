@@ -37,7 +37,7 @@ describe('CreateDriverComponent', () => {
     const btnCreateDriverDe = fixture.debugElement.query(By.css('#btnCreateDriver'));
     btnCreateDriverDe.triggerEventHandler('click');
 
-    const req = httpTestingController.expectOne('http://localhost:3000/drivers');
+    const req = httpTestingController.expectOne('/drivers');
     expect(req.request.method).toEqual('POST');
 
     const requestBody = { driverId: '123' };

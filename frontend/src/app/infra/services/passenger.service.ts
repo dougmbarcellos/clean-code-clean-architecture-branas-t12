@@ -15,6 +15,6 @@ export class PassengerService implements IPassenger {
     throw new Error('Method not implemented.');
   }
   save(passenger: NullableProperties<Passenger>): Observable<any> {
-    return this.httpClient.post('http://localhost:3000/passengers', passenger);
+    return this.httpClient.post('/passengers', passenger);
   }
 }

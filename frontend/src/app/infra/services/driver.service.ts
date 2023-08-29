@@ -15,6 +15,6 @@ export class DriverService implements IDriver {
     throw new Error('Method not implemented.');
   }
   save(driver: NullableProperties<Driver>): Observable<any> {
-    return this.httpClient.post('http://localhost:3000/drivers', driver);
+    return this.httpClient.post('/drivers', driver);
   }
 }

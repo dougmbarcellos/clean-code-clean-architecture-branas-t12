@@ -37,7 +37,7 @@ describe('CreatePassengerComponent', () => {
     const btnCreatePassengerDe = fixture.debugElement.query(By.css('#btnCreatePassenger'));
     btnCreatePassengerDe.triggerEventHandler('click');
 
-    const req = httpTestingController.expectOne('http://localhost:3000/passengers');
+    const req = httpTestingController.expectOne('/passengers');
     expect(req.request.method).toEqual('POST');
 
     const requestBody = { passengerId: '123' };
