@@ -14,14 +14,21 @@ import { DriverService } from 'src/app/infra/services/driver.service';
 export class CreateDriverComponent {
   private driverService = inject(DriverService);
   private fb = inject(FormBuilder);
+
   formGroup = this.fb.group<FormControlsBy<Driver>>({
-    id: this.fb.control({ value: '', disabled: true }),
-    name: this.fb.control(''),
-    email: this.fb.control('', {
-      validators: [Validators.email],
+    id: this.fb.control({ value: undefined, disabled: true }),
+    name: this.fb.control('', {
+      validators: [Validators.required],
     }),
-    document: this.fb.control(''),
-    carPlate: this.fb.control(''),
+    email: this.fb.control('', {
+      validators: [Validators.required, Validators.email],
+    }),
+    document: this.fb.control('', {
+      validators: [Validators.required],
+    }),
+    carPlate: this.fb.control('', {
+      validators: [Validators.required],
+    }),
   });
 
   createDriver() {

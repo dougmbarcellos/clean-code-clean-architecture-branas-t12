@@ -15,4 +15,6 @@
   <input id="carPlate" formControlName="carPlate" />
 </form>
 
-<button id="btnCreateDriver" (click)="createDriver()">Cadastrar Motorista</button>
+<button id="btnCreateDriver" (click)="createDriver()" [disabled]="formGroup.invalid">
+  Cadastrar Motorista
+</button>
