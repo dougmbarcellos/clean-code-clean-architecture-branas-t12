@@ -12,4 +12,6 @@
   <input id="document" formControlName="document" />
 </form>
 
-<button id="btnCreatePassenger" (click)="createPassenger()">Cadastrar Passageiro</button>
+<button id="btnCreatePassenger" (click)="createPassenger()" [disabled]="formGroup.invalid">
+  Cadastrar Passageiro
+</button>

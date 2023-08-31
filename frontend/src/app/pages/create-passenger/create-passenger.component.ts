@@ -15,12 +15,16 @@ export class CreatePassengerComponent {
   private passengerService = inject(PassengerService);
   private fb = inject(FormBuilder);
   formGroup = this.fb.group<FormControlsBy<Passenger>>({
-    id: this.fb.control({ value: '', disabled: true }),
-    name: this.fb.control(''),
-    email: this.fb.control('', {
-      validators: [Validators.email],
+    id: this.fb.control({ value: undefined, disabled: true }),
+    name: this.fb.control('', {
+      validators: [Validators.required],
     }),
-    document: this.fb.control(''),
+    email: this.fb.control('', {
+      validators: [Validators.required, Validators.email],
+    }),
+    document: this.fb.control('', {
+      validators: [Validators.required],
+    }),
   });
 
   createPassenger() {
