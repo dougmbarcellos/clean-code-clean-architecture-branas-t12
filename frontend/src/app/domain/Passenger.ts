@@ -1,5 +1,5 @@
 export default interface Passenger {
-  id: string;
+  id: string | undefined;
   name: string;
   email: string;
   document: string;
