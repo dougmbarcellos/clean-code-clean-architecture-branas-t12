@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpClientService } from '../http/http-client.service';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientAdapter } from 'src/app/infra/http/http-adapter-provider';
 import { PassengerService } from './passenger.service';
 
 describe('PassengerService', () => {
@@ -10,8 +9,7 @@ describe('PassengerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{ provide: HttpClientService, useClass: HttpClient }],
+      providers: [provideHttpClientAdapter(), provideHttpClientTesting()],
     });
     service = TestBed.inject(PassengerService);
   });

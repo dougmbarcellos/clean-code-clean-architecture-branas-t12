@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { HttpClientService } from 'src/app/infra/http/http-client.service';
+import { provideHttpClientAdapter } from 'src/app/infra/http/http-adapter-provider';
 import { CreateDriverComponent } from './create-driver.component';
 
 const name = 'Doug';
@@ -14,7 +13,6 @@ const carPlate = 'ABC1234';
 describe('CreateDriverComponent', () => {
   let fixture: ComponentFixture<CreateDriverComponent>;
   let component: CreateDriverComponent;
-  let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
 
   function setInputValuesFromFormGroup() {
@@ -26,14 +24,12 @@ describe('CreateDriverComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [CreateDriverComponent, HttpClientTestingModule],
-      providers: [{ provide: HttpClientService, useClass: HttpClient }],
+      imports: [CreateDriverComponent],
+      providers: [provideHttpClientAdapter(), provideHttpClientTesting()],
     });
 
     fixture = TestBed.createComponent(CreateDriverComponent);
     component = fixture.componentInstance;
-
-    httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 

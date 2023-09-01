@@ -1,15 +1,9 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
-import { HttpClientService } from './infra/http/http-client.service';
+import { provideHttpClientAdapter } from './infra/http/http-adapter-provider';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient(),
-    // { provide: HttpClientService, useClass: FetchAdapterService },
-    { provide: HttpClientService, useClass: HttpClient },
-  ],
+  providers: [provideRouter(routes), provideHttpClientAdapter()],
 };
