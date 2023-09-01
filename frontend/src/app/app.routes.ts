@@ -13,4 +13,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/create-driver/create-driver.component').then((m) => m.CreateDriverComponent),
   },
+  {
+    path: 'calculate-ride',
+    loadComponent: () =>
+      import('./pages/calculate-ride/calculate-ride.component').then(
+        (m) => m.CalculateRideComponent
+      ),
+  },
 ];
