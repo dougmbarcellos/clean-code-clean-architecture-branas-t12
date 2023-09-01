@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClientAdapter } from 'src/app/infra/http/http-adapter-provider';
+import { provideHttpClientAdapterTesting } from '../http/testing/http-adapter-provider-testing';
 import { DriverService } from './driver.service';
 
 describe('DriverService', () => {
@@ -9,7 +8,7 @@ describe('DriverService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClientAdapter(), provideHttpClientTesting()],
+      providers: [provideHttpClientAdapterTesting()],
     });
     service = TestBed.inject(DriverService);
   });

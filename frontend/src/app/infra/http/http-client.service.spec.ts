@@ -1,15 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClientAdapter } from 'src/app/infra/http/http-adapter-provider';
 import { HttpClientService } from './http-client.service';
+import { provideHttpClientAdapterTesting } from './testing/http-adapter-provider-testing';
 
 describe('HttpClientService', () => {
   let service: HttpClientService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClientAdapter(), provideHttpClientTesting()],
+      providers: [provideHttpClientAdapterTesting()],
     });
     service = TestBed.inject(HttpClientService);
   });

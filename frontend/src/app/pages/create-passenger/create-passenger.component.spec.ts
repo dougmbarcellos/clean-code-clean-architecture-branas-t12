@@ -1,13 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HttpClient } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { provideHttpClientAdapter } from 'src/app/infra/http/http-adapter-provider';
+import { provideHttpClientAdapterTesting } from 'src/app/infra/http/testing/http-adapter-provider-testing';
 import { CreatePassengerComponent } from './create-passenger.component';
 
 const name = 'Doug';
@@ -29,7 +25,7 @@ describe.only('CreatePassengerComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CreatePassengerComponent, HttpClientTestingModule],
-      providers: [provideHttpClientAdapter(), provideHttpClientTesting()],
+      providers: [provideHttpClientAdapterTesting()],
     });
 
     fixture = TestBed.createComponent(CreatePassengerComponent);

@@ -6,9 +6,9 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  let url = req.url.startsWith('api')
-    ? `${environment.apiUrl}/${req.url}`
-    : `${environment.apiUrl}${req.url}`;
+  let url = req.url.startsWith('/')
+    ? `${environment.apiUrl}${req.url}`
+    : `${environment.apiUrl}/${req.url}`;
 
   return next(
     req.clone({

@@ -1,12 +1,13 @@
-import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, HttpFeature, HttpFeatureKind, provideHttpClient } from '@angular/common/http';
 import { EnvironmentProviders, Provider } from '@angular/core';
-import { apiInterceptor } from './api.interceptor';
 import { HttpClientService } from './http-client.service';
 
-export function provideHttpClientAdapter(): (Provider | EnvironmentProviders)[] {
+export function provideHttpClientAdapter(
+  ...features: HttpFeature<HttpFeatureKind>[]
+): (Provider | EnvironmentProviders)[] {
   // { provide: HttpClientService, useClass: FetchAdapterService },
   return [
-    provideHttpClient(withInterceptors([apiInterceptor])),
+    provideHttpClient(...features),
     {
       provide: HttpClientService,
       useClass: HttpClient,

@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { provideHttpClientAdapter } from 'src/app/infra/http/http-adapter-provider';
+import { provideHttpClientAdapterTesting } from 'src/app/infra/http/testing/http-adapter-provider-testing';
 import { CreateDriverComponent } from './create-driver.component';
 
 const name = 'Doug';
@@ -25,7 +25,7 @@ describe('CreateDriverComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CreateDriverComponent],
-      providers: [provideHttpClientAdapter(), provideHttpClientTesting()],
+      providers: [provideHttpClientAdapterTesting()],
     });
 
     fixture = TestBed.createComponent(CreateDriverComponent);
