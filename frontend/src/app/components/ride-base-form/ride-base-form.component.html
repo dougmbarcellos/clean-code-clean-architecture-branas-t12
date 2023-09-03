@@ -1,0 +1,18 @@
+<br /><br />
+<button id="btnAddSegment" (click)="addSegment()">Adicionar Trajeto</button>
+<br /><br />
+
+<div *ngFor="let formGroupPosition of positions.controls; let i = index">
+  <form [formGroup]="formGroupPosition">
+    <label for="lat-{{ i }}">Latitude</label>
+    <input id="lat-{{ i }}" type="number" formControlName="lat" />
+
+    <label for="long-{{ i }}">Longitude</label>
+    <input id="long-{{ i }}" type="number" formControlName="long" />
+
+    <label for="date-{{ i }}">Data</label>
+    <input id="date-{{ i }}" type="datetime-local" step="1" formControlName="date" />
+    <button *ngIf="i > 1" id="btnRemoveSegment" (click)="removeSegment(i)">Remover Trajeto</button>
+  </form>
+  <br />
+</div>
