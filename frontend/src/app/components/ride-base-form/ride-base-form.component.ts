@@ -23,23 +23,11 @@ export class RideBaseFormComponent {
       long: this.fb.control<null | number>(null, {
         validators: [Validators.required],
       }),
-      date: this.fb.control<string>('2013-03-01T01:10:00', {
+      date: this.fb.control<string>('', {
         validators: [Validators.required],
       }),
     });
   }
-
-  change(event: any) {
-    console.log(event);
-  }
-
-  // ngOnInit() {
-  //   of(null)
-  //     .pipe(timeout(1000))
-  //     .subscribe(() => {
-  //       this.positions.at(0).controls.date.setValue('2013-03-01T01:10:01');
-  //     });
-  // }
 
   addSegment() {
     this.positions.push(this.createGroup());
