@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import { provideHttpClientAdapterTesting } from 'src/app/infra/http/testing/http-adapter-provider-testing';
+import { getInputElement } from 'src/app/testing/input';
 import { CreateDriverComponent } from './create-driver.component';
 
 const name = 'Doug';
@@ -31,15 +32,14 @@ describe('CreateDriverComponent', () => {
     fixture = TestBed.createComponent(CreateDriverComponent);
     component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
+    fixture.detectChanges();
   });
 
   it('deve ser criado', () => {
     expect(component).toBeTruthy();
   });
 
-  it('botão #btnCreateDriver deve desabilitar se os campos requeridos não estiverem preenchidos', async () => {
-    await fixture.whenStable();
-    fixture.detectChanges();
+  it('botão #btnCreateDriver deve desabilitar se os campos requeridos não estiverem preenchidos', () => {
     const btnCreateDriver = <HTMLButtonElement>(
       fixture.debugElement.query(By.css('#btnCreateDriver')).nativeElement
     );
@@ -48,19 +48,10 @@ describe('CreateDriverComponent', () => {
 
   it('preenchimento do formGroup deve refletir no html', () => {
     setInputValuesFromFormGroup();
-    fixture.detectChanges();
-    const nameInput = <HTMLInputElement>fixture.debugElement.query(By.css('#name')).nativeElement;
-    expect(nameInput.value).toBe(name);
-    const emailInput = <HTMLInputElement>fixture.debugElement.query(By.css('#email')).nativeElement;
-    expect(emailInput.value).toBe(email);
-    const documentInput = <HTMLInputElement>(
-      fixture.debugElement.query(By.css('#document')).nativeElement
-    );
-    expect(documentInput.value).toBe(document);
-    const carPlateInput = <HTMLInputElement>(
-      fixture.debugElement.query(By.css('#carPlate')).nativeElement
-    );
-    expect(carPlateInput.value).toBe(carPlate);
+    expect(getInputElement(fixture, '#name').value).toBe(name);
+    expect(getInputElement(fixture, '#email').value).toBe(email);
+    expect(getInputElement(fixture, '#document').value).toBe(document);
+    expect(getInputElement(fixture, '#carPlate').value).toBe(carPlate);
   });
 
   // narrow integration test
@@ -79,7 +70,6 @@ describe('CreateDriverComponent', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    const inputId = <HTMLInputElement>fixture.debugElement.query(By.css('#id')).nativeElement;
-    expect(inputId.value).toBe(responseBody.driverId);
+    expect(getInputElement(fixture, '#id').value).toBe(responseBody.driverId);
   });
 });

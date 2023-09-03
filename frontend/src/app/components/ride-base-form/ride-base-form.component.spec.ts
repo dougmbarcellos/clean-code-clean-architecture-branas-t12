@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
+import { getInputElement } from 'src/app/testing/input';
 import { RideBaseFormComponent } from './ride-base-form.component';
 
 const coordsSaoRoque = [-19.7392195, -40.6681334];
@@ -30,7 +31,7 @@ describe('RideBaseFormComponent', () => {
     expect(btnAddSegment).toBeNull();
   });
 
-  it('deve fazer o preenchimento dos campos através do FormControl', async () => {
+  it('deve fazer o preenchimento dos campos através do FormControl', () => {
     const date = '2013-03-01T01:10:01';
     component.positions.at(0).controls.lat.setValue(coordsSaoRoque[0]);
     component.positions.at(0).controls.long.setValue(coordsSaoRoque[1]);
@@ -40,15 +41,10 @@ describe('RideBaseFormComponent', () => {
     component.positions.at(1).controls.long.setValue(coordsSantaTeresa[1]);
     component.positions.at(1).controls.date.setValue(date);
 
-    fixture.detectChanges();
-    await fixture.whenStable();
-
     const renderedInputsIdList = ['lat-0', 'long-0', 'date-0', 'lat-1', 'long-1', 'date-1'];
 
     renderedInputsIdList.forEach((inputId) => {
-      const input = <HTMLInputElement>(
-        fixture.debugElement.query(By.css(`#${inputId}`)).nativeElement
-      );
+      const input = getInputElement(fixture, `#${inputId}`);
       expect(input.value).toBeTruthy();
       type Indexes = '0' | '1';
       type Fields = 'lat' | 'long' | 'date';
@@ -66,7 +62,7 @@ describe('RideBaseFormComponent', () => {
     });
   });
 
-  it('deve adicionar e remover segmento', () => {
+  it('deve adicionar e remover percurso', () => {
     expect(component.positions.length).toBe(2);
 
     const btnAddSegment = fixture.debugElement.query(By.css('#btnAddSegment'));
