@@ -1,0 +1,5 @@
+<app-ride-base-form #rideBaseForm />
+
+<button id="btnRequest" (click)="request()" [disabled]="rideBaseForm.positions.invalid">
+  Solicitar corrida
+</button>

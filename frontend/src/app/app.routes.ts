@@ -20,4 +20,9 @@ export const routes: Routes = [
         (m) => m.CalculateRideComponent
       ),
   },
+  {
+    path: 'request-ride',
+    loadComponent: () =>
+      import('./pages/request-ride/request-ride.component').then((m) => m.RequestRideComponent),
+  },
 ];
