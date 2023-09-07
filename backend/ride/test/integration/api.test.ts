@@ -1,5 +1,6 @@
 import axios from 'axios';
 import UUIDGenerator from '../../src/application/domain/identity/UUIDGenerator';
+import { increasePosition } from '../utils';
 
 axios.defaults.validateStatus = function () {
   return true;
@@ -156,6 +157,38 @@ test('Deve iniciar uma corrida', async function () {
   const output3 = response3.data;
   expect(output3.rideStatus).toBe('started');
   expect(output3.startDate).toBeDefined();
+});
+
+test('Deve realizar a atualização da posição do veículo', async () => {
+  const input1 = {
+    passengerId: '64a32d0fe14712d428c5c66d',
+    positions: [
+      { lat: coordsSaoRoque[0], long: coordsSaoRoque[1], date: '2021-03-01T10:00:00' },
+      { lat: coordsSantaTeresa[0], long: coordsSantaTeresa[1], date: '2021-03-01T10:30:00' },
+    ],
+  };
+  const response1 = await axios.post('http://localhost:3000/request_ride', input1);
+  const { _id: rideId } = response1.data;
+
+  const input2 = {
+    rideId,
+    driverId: '64a32d2fe14712d428c5c66e',
+  };
+
+  await axios.post('http://localhost:3000/accept_ride', input2);
+
+  const input3 = { rideId };
+  await axios.post('http://localhost:3000/start_ride', input3);
+
+  const coord = increasePosition(coordsSaoRoque, +1);
+  const input4 = {
+    rideId: rideId,
+    location: { lat: coord[0], long: coord[1] },
+    date: '2021-03-01T10:05:00',
+  };
+  const response4 = await axios.post('http://localhost:3000/update_ride_location', input4);
+  const output4 = response4.data;
+  expect(output4.locations.length).toBe(1);
 });
 
 test('Deve adicionar um novo percurso a corrida', async function () {

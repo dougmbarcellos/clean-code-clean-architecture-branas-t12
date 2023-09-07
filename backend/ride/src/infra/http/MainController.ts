@@ -9,6 +9,7 @@ import GetPassenger from '../../application/usecases/GetPassenger';
 import GetRide from '../../application/usecases/GetRide';
 import RequestRide from '../../application/usecases/RequestRide';
 import StartRide from '../../application/usecases/StartRide';
+import UpdateRideLocation from '../../application/usecases/UpdateRideLocation';
 import HttpServer from './HttpServer';
 
 export default class MainController {
@@ -23,6 +24,7 @@ export default class MainController {
     getRide: GetRide,
     acceptRide: AcceptRide,
     startRide: StartRide,
+    updateRideLocation: UpdateRideLocation,
     addSegmentToRide: AddSegmentToRide,
     endRide: EndRide
   ) {
@@ -66,6 +68,7 @@ export default class MainController {
         passengerId: output.passengerId,
         segments: output.segments,
         positions: output.positions,
+        locations: output.locations,
         requestDate: output.requestDate,
         rideStatus: output.rideStatus.value,
         driverId: output.driverId,
@@ -87,6 +90,15 @@ export default class MainController {
     httpServer.on('post', '/start_ride', async function (params: any, body: any) {
       const output = await startRide.execute({
         rideId: body.rideId,
+      });
+      return output;
+    });
+
+    httpServer.on('post', '/update_ride_location', async function (params: any, body: any) {
+      const output = await updateRideLocation.execute({
+        rideId: body.rideId,
+        location: body.location,
+        date: body.date,
       });
       return output;
     });

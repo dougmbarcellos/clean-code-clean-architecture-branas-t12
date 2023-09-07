@@ -9,6 +9,7 @@ import GetPassenger from './application/usecases/GetPassenger';
 import GetRide from './application/usecases/GetRide';
 import RequestRide from './application/usecases/RequestRide';
 import StartRide from './application/usecases/StartRide';
+import UpdateRideLocation from './application/usecases/UpdateRideLocation';
 import MongoClientAdapter from './infra/database/MongoClientAdapter';
 import ExpressAdapter from './infra/http/ExpressAdapter';
 import MainController from './infra/http/MainController';
@@ -30,6 +31,7 @@ const requestRide = new RequestRide(rideRepository);
 const getRide = new GetRide(rideRepository);
 const acceptRide = new AcceptRide(rideRepository);
 const startRide = new StartRide(rideRepository);
+const updateRideLocation = new UpdateRideLocation(rideRepository);
 const addSegmentToRide = new AddSegmentToRide(rideRepository);
 const endRide = new EndRide(rideRepository);
 const httpServer = new ExpressAdapter();
@@ -46,6 +48,7 @@ new MainController(
   getRide,
   acceptRide,
   startRide,
+  updateRideLocation,
   addSegmentToRide,
   endRide
 );

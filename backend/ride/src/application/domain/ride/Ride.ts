@@ -14,6 +14,7 @@ import RideStatusFactory from './status/RideStatusFactory';
 export default class Ride {
   segments: Segment[] = [];
   positions: Position[] = [];
+  locations: Position[] = [];
   MIN_PRICE = 10;
   fareCalculator: FareCalculatorHandler;
   rideStatus: RideStatus;
@@ -45,6 +46,10 @@ export default class Ride {
 
   addPosition(lat: number, long: number, date: Date) {
     this.positions.push(new Position(lat, long, date));
+  }
+
+  addLocation(lat: number, long: number, date: Date) {
+    this.locations.push(new Position(lat, long, date));
   }
 
   calculate() {

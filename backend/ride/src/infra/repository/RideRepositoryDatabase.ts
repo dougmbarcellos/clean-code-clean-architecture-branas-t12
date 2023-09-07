@@ -12,6 +12,7 @@ export default class RideRepositoryDatabase implements RideRepository {
       passengerId: ride.passengerId,
       segments: ride.segments,
       positions: ride.positions,
+      locations: ride.locations,
       requestDate: ride.requestDate ? new Date(ride.requestDate) : null,
       rideStatus: ride.rideStatus.value,
       acceptDate: ride.acceptDate ? new Date(ride.acceptDate) : null,
@@ -34,6 +35,7 @@ export default class RideRepositoryDatabase implements RideRepository {
           passengerId: ride.passengerId,
           segments: ride.segments,
           positions: ride.positions,
+          locations: ride.locations,
           requestDate: ride.requestDate ? new Date(ride.requestDate) : null,
           rideStatus: ride.rideStatus.value,
           acceptDate: ride.acceptDate ? new Date(ride.acceptDate) : null,
@@ -69,6 +71,13 @@ export default class RideRepositoryDatabase implements RideRepository {
         ride.addPosition(position.lat, position.long, new Date(position.date));
       }
     }
+
+    if (data.locations) {
+      for (const locations of data.locations) {
+        ride.addLocation(locations.lat, locations.long, new Date(locations.date));
+      }
+    }
+
     ride.calculate();
     return ride;
   }
