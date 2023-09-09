@@ -1,6 +1,7 @@
 import Ride from '../Ride';
 import AcceptedRideStatus from './AcceptedRideStatus';
 import EndedRideStatus from './EndedRideStatus';
+import PaymentProcessedStatus from './PaymentProcessedStatus';
 import RequestedRideStatus from './RequestedRideStatus';
 import StartedRideStatus from './StartedRideStatus';
 
@@ -20,6 +21,10 @@ export default class RideStatusFactory {
 
     if (status === 'ended') {
       return new EndedRideStatus(ride);
+    }
+
+    if (status === 'paymentProcessed') {
+      return new PaymentProcessedStatus(ride);
     }
 
     throw new Error('Invalid status');

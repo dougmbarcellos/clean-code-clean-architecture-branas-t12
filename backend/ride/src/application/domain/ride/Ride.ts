@@ -28,7 +28,8 @@ export default class Ride {
     public driverId: string | null,
     public startDate: Date | null,
     public endDate: Date | null,
-    public waitingDuration: number | null
+    public waitingDuration: number | null,
+    public processPaymentDate: Date | null
   ) {
     const overnightSundayFareCalculatorHandler = new OvernightSundayFareCalculatorHandler();
     const sundayFareCalculatorHandler = new SundayFareCalculatorHandler(
@@ -41,7 +42,7 @@ export default class Ride {
 
   static create(passengerId: string) {
     const _id = UUIDGenerator.create();
-    return new Ride(_id, passengerId, new Date(), 'requested', null, null, null, null, null);
+    return new Ride(_id, passengerId, new Date(), 'requested', null, null, null, null, null, null);
   }
 
   addPosition(lat: number, long: number, date: Date) {
@@ -82,5 +83,10 @@ export default class Ride {
     this.endDate = date;
     this.rideStatus.end();
     this.waitingDuration = this.endDate.valueOf() - new Date(this.startDate!).valueOf();
+  }
+
+  processPayment(date: Date) {
+    this.processPaymentDate = date;
+    this.rideStatus.processPayment();
   }
 }

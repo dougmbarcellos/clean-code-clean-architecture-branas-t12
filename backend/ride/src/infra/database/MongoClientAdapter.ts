@@ -49,7 +49,17 @@ export default class MongoClientAdapter implements DatabaseConnection {
     );
   }
 
+  async watch(collectionName: string, ...args: any) {
+    await client.connect();
+    return client
+      .db('db1')
+      .collection(collectionName)
+      .watch(...args);
+  }
+
   async close(): Promise<void> {
-    await client.close();
+    // Desabilitado fechamento da conexão pois ao utilizar o .watch()
+    // novas conexões abertas estavam causando erro.
+    // await client.close();
   }
 }

@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import { ChangeStream, Document, ObjectId } from 'mongodb';
 import Ride from '../../application/domain/ride/Ride';
 import RideRepository from '../../application/repository/RideRepository';
 import DatabaseConnection from '../database/DatabaseConnection';
@@ -6,6 +6,7 @@ import DatabaseConnection from '../database/DatabaseConnection';
 // Interface Adapter
 export default class RideRepositoryDatabase implements RideRepository {
   constructor(readonly connection: DatabaseConnection) {}
+
   async insert(ride: Ride) {
     const data = {
       _id: ride._id,
@@ -20,6 +21,7 @@ export default class RideRepositoryDatabase implements RideRepository {
       startDate: ride.startDate ? new Date(ride.startDate) : null,
       endDate: ride.endDate ? new Date(ride.endDate) : null,
       waitingDuration: ride.waitingDuration,
+      processPaymentDate: ride.processPaymentDate,
     };
     await this.connection.insertOne('rides', data);
     await this.connection.close();
@@ -43,6 +45,7 @@ export default class RideRepositoryDatabase implements RideRepository {
           startDate: ride.startDate ? new Date(ride.startDate) : null,
           endDate: ride.endDate ? new Date(ride.endDate) : null,
           waitingDuration: ride.waitingDuration,
+          processPaymentDate: ride.processPaymentDate,
         },
       },
       { returnDocument: 'after' }
@@ -63,7 +66,8 @@ export default class RideRepositoryDatabase implements RideRepository {
       data.driverId,
       data.startDate,
       data.endDate,
-      data.waitingDuration
+      data.waitingDuration,
+      data.processPaymentDate
     );
 
     if (data.positions) {
@@ -80,5 +84,9 @@ export default class RideRepositoryDatabase implements RideRepository {
 
     ride.calculate();
     return ride;
+  }
+
+  async watch(pipeline?: Document[] | undefined): Promise<ChangeStream> {
+    return this.connection.watch('rides', pipeline);
   }
 }

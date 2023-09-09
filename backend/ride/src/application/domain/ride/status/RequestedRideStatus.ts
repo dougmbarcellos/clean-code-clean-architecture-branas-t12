@@ -22,4 +22,7 @@ export default class RequestedRideStatus extends RideStatus {
   end(): void {
     throw new Error('Invalid status');
   }
+  processPayment(): void {
+    throw new Error('Invalid status');
+  }
 }

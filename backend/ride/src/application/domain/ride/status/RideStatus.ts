@@ -8,4 +8,5 @@ export default abstract class RideStatus {
   abstract accept(): void;
   abstract start(): void;
   abstract end(): void;
+  abstract processPayment(): void;
 }

@@ -22,4 +22,7 @@ export default class StartedRideStatus extends RideStatus {
   end(): void {
     this.ride.rideStatus = new EndedRideStatus(this.ride);
   }
+  processPayment(): void {
+    throw new Error('Invalid status');
+  }
 }

@@ -1,9 +1,8 @@
-import { ChangeStream, ChangeStreamDocument, Document } from 'mongodb';
+import { ChangeStream, Document } from 'mongodb';
 import UUIDGenerator from '../../src/application/domain/identity/UUIDGenerator';
 import Ride from '../../src/application/domain/ride/Ride';
 import RideRepository from '../../src/application/repository/RideRepository';
-import UpdateRideLocation from '../../src/application/usecases/UpdateRideLocation';
-import { increasePosition } from '../utils';
+import ProcessPayment from '../../src/application/usecases/ProcessPayment';
 
 const coordsSaoRoque = [-19.7392195, -40.6681334];
 const coordsSantaTeresa = [-19.9320348, -40.6102108];
@@ -18,26 +17,24 @@ class RideRepositoryDatabaseFake implements RideRepository {
     ride.addPosition(coordsSantaTeresa[0], coordsSantaTeresa[1], new Date('2021-03-01T08:00:00'));
     ride.accept('123', new Date('2021-03-01T08:05:00'));
     ride.start(new Date('2021-03-01T08:15:00'));
+    ride.end(new Date('2021-03-01T08:25:00'));
     return ride;
   }
   update(ride: Ride): Promise<any> {
     return new Promise((resolve) => resolve(ride));
   }
-  watch(
-    pipeline?: Document[] | undefined
-  ): Promise<ChangeStream<Document, ChangeStreamDocument<Document>>> {
+  watch(pipeline?: Document[] | undefined): Promise<ChangeStream> {
     throw new Error('Method not implemented.');
   }
 }
 
-test('deve realizar a atualização da posição do veículo', async () => {
-  const usecase = new UpdateRideLocation(new RideRepositoryDatabaseFake());
-  const coord = increasePosition(coordsSaoRoque, +1);
+test('deve realizar o processamento do pagamento após finalizar a corrida', async () => {
+  const usecase = new ProcessPayment(new RideRepositoryDatabaseFake());
   const input = {
     rideId: UUIDGenerator.create().toString(),
-    location: { lat: coord[0], long: coord[1] },
-    date: '2021-03-01T10:00:00',
+    date: new Date('2021-03-01T08:28:00'),
   };
   const output = await usecase.execute(input);
-  expect(output.locations.length).toBe(1);
+  expect(output.processPaymentDate).toBe(input.date);
+  expect(output.rideStatus.value).toBe('paymentProcessed');
 });
