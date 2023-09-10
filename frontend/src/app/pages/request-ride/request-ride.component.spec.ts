@@ -69,9 +69,9 @@ describe('RequestRideComponent', () => {
     };
     expect(req.request.body).toEqual(requestBody);
 
-    const responseBody = { price: 10 };
+    const responseBody = { _id: '123' };
     req.flush(responseBody);
-    expect(window.alert).toBeCalledWith(responseBody.price);
+    expect(window.alert).toBeCalledWith(responseBody._id);
   });
 
   it('deve adicionar e preencher um novo percurso', () => {
