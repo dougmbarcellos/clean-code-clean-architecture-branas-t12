@@ -5,6 +5,7 @@ export default class ProcessPayment {
 
   async execute(input: Input): Promise<Output> {
     const ride = await this.rideRepository.get(input.rideId);
+    // [gerar NF com api]
     ride.processPayment(input.date);
     const output = await this.rideRepository.update(ride);
     return output;

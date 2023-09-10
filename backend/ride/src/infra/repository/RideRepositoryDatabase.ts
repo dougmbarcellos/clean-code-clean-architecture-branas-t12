@@ -22,6 +22,7 @@ export default class RideRepositoryDatabase implements RideRepository {
       endDate: ride.endDate ? new Date(ride.endDate) : null,
       waitingDuration: ride.waitingDuration,
       processPaymentDate: ride.processPaymentDate,
+      sendInvoiceDate: ride.sendInvoiceDate,
     };
     await this.connection.insertOne('rides', data);
     await this.connection.close();
@@ -46,6 +47,7 @@ export default class RideRepositoryDatabase implements RideRepository {
           endDate: ride.endDate ? new Date(ride.endDate) : null,
           waitingDuration: ride.waitingDuration,
           processPaymentDate: ride.processPaymentDate,
+          sendInvoiceDate: ride.sendInvoiceDate,
         },
       },
       { returnDocument: 'after' }
@@ -67,7 +69,8 @@ export default class RideRepositoryDatabase implements RideRepository {
       data.startDate,
       data.endDate,
       data.waitingDuration,
-      data.processPaymentDate
+      data.processPaymentDate,
+      data.sendInvoiceDate
     );
 
     if (data.positions) {

@@ -77,6 +77,7 @@ export default class MainController {
         endDate: output.endDate,
         waitingDuration: output.waitingDuration,
         processPaymentDate: output.processPaymentDate,
+        sendInvoiceDate: output.sendInvoiceDate,
       };
     });
 

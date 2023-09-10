@@ -1,13 +1,12 @@
 import Ride from '../Ride';
-import PaymentProcessedStatus from './PaymentProcessedStatus';
 import RideStatus from './RideStatus';
 
-export default class EndedRideStatus extends RideStatus {
+export default class InvoiceSentStatus extends RideStatus {
   value: string;
 
   constructor(ride: Ride) {
     super(ride);
-    this.value = 'ended';
+    this.value = 'invoiceSent';
   }
 
   request(): void {
@@ -23,7 +22,7 @@ export default class EndedRideStatus extends RideStatus {
     throw new Error('Invalid status');
   }
   processPayment(): void {
-    this.ride.rideStatus = new PaymentProcessedStatus(this.ride);
+    throw new Error('Invalid status');
   }
   sendInvoice(): void {
     throw new Error('Invalid status');

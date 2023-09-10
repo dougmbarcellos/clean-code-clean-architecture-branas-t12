@@ -1,4 +1,5 @@
 import Ride from '../Ride';
+import InvoiceSentStatus from './InvoiceSentStatus';
 import RideStatus from './RideStatus';
 
 export default class PaymentProcessedStatus extends RideStatus {
@@ -23,5 +24,8 @@ export default class PaymentProcessedStatus extends RideStatus {
   }
   processPayment(): void {
     throw new Error('Invalid status');
+  }
+  sendInvoice(): void {
+    this.ride.rideStatus = new InvoiceSentStatus(this.ride);
   }
 }
