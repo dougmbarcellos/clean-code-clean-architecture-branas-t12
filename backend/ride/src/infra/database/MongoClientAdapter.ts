@@ -6,7 +6,6 @@ export default class MongoClientAdapter implements DatabaseConnection {
   constructor() {}
 
   async findOne(collectionName: string, ...args: any) {
-    await client.connect();
     return (
       client
         .db('db1')
@@ -17,7 +16,6 @@ export default class MongoClientAdapter implements DatabaseConnection {
   }
 
   async updateOne(collectionName: string, ...args: any) {
-    await client.connect();
     return (
       client
         .db('db1')
@@ -28,7 +26,6 @@ export default class MongoClientAdapter implements DatabaseConnection {
   }
 
   async findOneAndUpdate(collectionName: string, ...args: any) {
-    await client.connect();
     return (
       client
         .db('db1')
@@ -39,7 +36,6 @@ export default class MongoClientAdapter implements DatabaseConnection {
   }
 
   async insertOne(collectionName: string, ...args: any) {
-    await client.connect();
     return (
       client
         .db('db1')
@@ -50,7 +46,6 @@ export default class MongoClientAdapter implements DatabaseConnection {
   }
 
   async watch(collectionName: string, ...args: any) {
-    await client.connect();
     return client
       .db('db1')
       .collection(collectionName)
